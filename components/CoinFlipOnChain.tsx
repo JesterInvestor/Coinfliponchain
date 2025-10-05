@@ -14,6 +14,7 @@ export default function CoinFlipOnChain() {
   const [betAmount, setBetAmount] = useState<number>(1000);
   const [customAmount, setCustomAmount] = useState<string>("");
   const [platformFeeBps, setPlatformFeeBps] = useState<number>(100); // 1% default
+  const [totalSupply, setTotalSupply] = useState<number>(0);
 
   const { 
     placeBet, 
@@ -56,6 +57,10 @@ export default function CoinFlipOnChain() {
         if (feeInfo.bps > 0) {
           setPlatformFeeBps(feeInfo.bps);
         }
+        
+        // Load total supply
+        const supply = await getTokenSupply();
+        setTotalSupply(supply);
         
         if (account) {
           const playerStats = await getPlayerStats(account.address);
@@ -180,6 +185,16 @@ export default function CoinFlipOnChain() {
           0x9d8eCa05F0FD5486916471c2145e32cdBF5112dF
         </p>
       </div>
+
+      {/* Total Supply */}
+      {totalSupply > 0 && (
+        <div className="w-full text-center bg-blue-100 dark:bg-blue-900/30 rounded-lg p-4">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">Total $FLIP Supply</p>
+          <p className="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400">
+            {totalSupply.toLocaleString()} $FLIP
+          </p>
+        </div>
+      )}
 
       {/* User Balance and Status */}
       {effectiveIsConnected && (
