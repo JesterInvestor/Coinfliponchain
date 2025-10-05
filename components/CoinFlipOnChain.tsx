@@ -30,7 +30,7 @@ export default function CoinFlipOnChain() {
   const canBet = flipBalance >= MINIMUM_FLIP_TO_BET;
   const isVIP = flipBalance >= VIP_FLIP_THRESHOLD;
 
-  const quickBetAmounts = [0.5, 5, 50, 500];
+  const quickBetAmounts = [1000, 10000, 100000, 1000000];
 
   const handleQuickBet = (amount: number) => {
     setBetAmount(amount);
@@ -294,7 +294,7 @@ export default function CoinFlipOnChain() {
                   : "bg-white dark:bg-gray-800 text-gray-800 dark:text-white hover:scale-105 shadow-md"
               } disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 min-h-[70px]`}
             >
-              ${amount.toFixed(2)}
+              {amount.toLocaleString()}
             </button>
           ))}
         </div>
