@@ -63,7 +63,28 @@ const {
   isConnected,        // Wallet connection status
   account,            // User's account
   approveTokens,      // Approve token spending
+  balanceData,        // Raw balance data from useReadContract hook
+  isBalancePending,   // Loading state for balance query
 } = useCoinFlip();
+```
+
+### Using useReadContract Hook
+
+The hook now includes `useReadContract` from thirdweb/react which automatically updates when the contract changes:
+
+```typescript
+// balanceData contains the raw balance (in wei)
+// isBalancePending indicates if the balance is loading
+// flipBalance is the converted balance (auto-updated from balanceData)
+
+if (isBalancePending) {
+  console.log("Loading balance...");
+}
+
+if (balanceData) {
+  console.log("Raw balance (wei):", balanceData.toString());
+  console.log("Balance (tokens):", flipBalance);
+}
 ```
 
 ### Placing a Bet

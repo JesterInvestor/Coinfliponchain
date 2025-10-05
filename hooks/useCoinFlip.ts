@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { getContract, prepareContractCall, sendTransaction, readContract } from "thirdweb";
 import { createThirdwebClient } from "thirdweb";
 import { base, baseSepolia } from "thirdweb/chains";
@@ -38,6 +38,33 @@ export function useCoinFlip() {
     chain,
     address: tokenAddress,
   });
+
+  /**
+   * Use the useReadContract hook to read balance from contract
+   * This hook automatically updates when the contract changes
+   */
+  const { data: balanceData, isPending: isBalancePending } = useReadContract(
+    account
+      ? {
+          contract: tokenContract,
+          method: "function balanceOf(address owner) view returns (uint256 result)",
+          params: [account.address],
+        }
+      : {
+          contract: tokenContract,
+          method: "function balanceOf(address owner) view returns (uint256 result)",
+          params: ["0x0000000000000000000000000000000000000000"],
+          queryOptions: { enabled: false },
+        }
+  );
+
+  // Update flipBalance state when balanceData changes
+  useEffect(() => {
+    if (balanceData && account) {
+      const balanceInTokens = Number(balanceData) / 10**18;
+      setFlipBalance(balanceInTokens);
+    }
+  }, [balanceData, account]);
 
   /**
    * Get FLIP token balance
@@ -226,5 +253,7 @@ export function useCoinFlip() {
     error,
     isConnected: !!account,
     account,
+    balanceData,
+    isBalancePending,
   };
 }
