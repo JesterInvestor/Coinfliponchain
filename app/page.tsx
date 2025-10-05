@@ -1,4 +1,4 @@
-import CoinFlip from "@/components/CoinFlip";
+import CoinFlipOnChain from "@/components/CoinFlipOnChain";
 import WalletConnect from "@/components/WalletConnect";
 
 export default function Home() {
@@ -47,7 +47,7 @@ export default function Home() {
 
           {/* Coin Flip Game */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-            <CoinFlip />
+            <CoinFlipOnChain />
           </div>
 
           {/* Features */}
