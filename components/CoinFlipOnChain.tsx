@@ -163,7 +163,7 @@ export default function CoinFlipOnChain() {
       {/* Step 1: Buy Native Token Button */}
       <div className="w-full space-y-3">
         <button
-          onClick={() => window.open(`https://app.uniswap.org/swap?chain=base&outputCurrency=0x9d8eCa05F0FD5486916471c2145e32cdBF5112dF`, '_blank')}
+          onClick={() => window.open(`https://matcha.xyz/tokens/base/0x9d8eCa05F0FD5486916471c2145e32cdBF5112dF`, '_blank')}
           className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-lg sm:text-xl font-bold rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 active:scale-95 min-h-[60px]"
         >
           💎 Step 1: Buy Native Token ($FLIP)
