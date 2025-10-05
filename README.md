@@ -12,6 +12,10 @@ A modern, on-chain coin flipping application built with Next.js, Thirdweb SDK, a
 - 🎮 **Interactive Gameplay** with real-time statistics
 - 🖼️ **Farcaster Frames** ready with OG image generation
 - 🔐 **Web3 Wallet Support** (MetaMask, WalletConnect, Coinbase Wallet, etc.)
+- 💰 **ERC20 Token Betting** with $FLIP tokens
+- 🏦 **Platform Fees** using Thirdweb's PlatformFee extension
+- 🔒 **Smart Contract Security** with access control and treasury management
+- 📊 **Real-time Balance Tracking** from blockchain
 
 ## 🛠️ Tech Stack
 
@@ -54,10 +58,12 @@ npm run dev
 
 ## 🎮 How to Use
 
-1. **Connect Wallet**: Click the "Connect Wallet" button in the top-right corner
-2. **Flip Coin**: Click the "Flip Coin" button to flip
-3. **View Stats**: Track your flip history with real-time statistics
-4. **On-Chain**: Future updates will record flips on the blockchain
+1. **Get $FLIP Tokens**: Buy $FLIP tokens from the exchange or receive from admin
+2. **Connect Wallet**: Click the "Connect Wallet" button in the top-right corner
+3. **Select Your Bet**: Choose Heads or Tails and your bet amount
+4. **Place Bet**: Approve token spending and place your bet
+5. **Win or Lose**: Results are determined on-chain with automatic payouts
+6. **View Stats**: Track your betting history and statistics on-chain
 
 ## 🏗️ Project Structure
 
@@ -118,9 +124,12 @@ vercel deploy
 
 ### Environment Variables
 Make sure to set these in your deployment platform:
-- `NEXT_PUBLIC_THIRDWEB_CLIENT_ID`
-- `NEXT_PUBLIC_CHAIN_ID`
-- `NEXT_PUBLIC_CONTRACT_ADDRESS`
+- `NEXT_PUBLIC_THIRDWEB_CLIENT_ID` - Your Thirdweb client ID
+- `NEXT_PUBLIC_CHAIN_ID` - Chain ID (8453 for Base Mainnet, 84532 for Base Sepolia)
+- `NEXT_PUBLIC_CONTRACT_ADDRESS` - CoinFlipBetting contract address
+- `NEXT_PUBLIC_FLIP_TOKEN_ADDRESS` - FLIP token (ERC20) contract address
+
+See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for detailed deployment instructions.
 
 ## 🤝 Contributing
 

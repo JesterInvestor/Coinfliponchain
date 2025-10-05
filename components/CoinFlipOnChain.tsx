@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCoinFlip } from "@/hooks/useCoinFlip";
 
 type CoinSide = "heads" | "tails";
@@ -11,20 +11,31 @@ export default function CoinFlipOnChain() {
   const [message, setMessage] = useState("Select Heads or Tails to start!");
   const [stats, setStats] = useState({ heads: 0, tails: 0, total: 0 });
   const [selectedSide, setSelectedSide] = useState<CoinSide | null>(null);
-  const [betAmount, setBetAmount] = useState<number>(5);
+  const [betAmount, setBetAmount] = useState<number>(1000);
   const [customAmount, setCustomAmount] = useState<string>("");
-  const [flipBalance, setFlipBalance] = useState<number>(0); // User's FLIP token balance
-  const [demoMode, setDemoMode] = useState<boolean>(false); // Demo mode for testing without wallet
+  const [platformFeeBps, setPlatformFeeBps] = useState<number>(100); // 1% default
 
-  const { flipCoinOnChain, isFlipping: isOnChainFlipping, error, isConnected } = useCoinFlip();
+  const { 
+    placeBet, 
+    getPlayerStats, 
+    getFlipBalance, 
+    getTokenSupply,
+    getPlatformFeeInfo,
+    flipBalance, 
+    isFlipping: isOnChainFlipping, 
+    error, 
+    isConnected,
+    account 
+  } = useCoinFlip();
   
-  // Use demo mode or real wallet connection
-  const effectiveIsConnected = isConnected || demoMode;
+  const effectiveIsConnected = isConnected;
 
   // Constants for requirements
   const MINIMUM_FLIP_TO_BET = 1000;
   const VIP_FLIP_THRESHOLD = 1000000;
-  const BET_FEE_PERCENTAGE = 0.01; // 1% fee
+  
+  // Calculate platform fee from bps (basis points)
+  const BET_FEE_PERCENTAGE = platformFeeBps / 10000;
   
   // Check if user has enough FLIP to bet
   const canBet = flipBalance >= MINIMUM_FLIP_TO_BET;
@@ -37,11 +48,33 @@ export default function CoinFlipOnChain() {
     setCustomAmount("");
   };
 
-  // Simulate adding FLIP tokens for testing (in production, this would come from reading the contract)
-  const simulateAddFlip = (amount: number) => {
-    setFlipBalance(prev => prev + amount);
-    setMessage(`✅ Added ${amount.toLocaleString()} $FLIP to your balance!`);
-  };
+  // Load platform fee and stats on mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const feeInfo = await getPlatformFeeInfo();
+        if (feeInfo.bps > 0) {
+          setPlatformFeeBps(feeInfo.bps);
+        }
+        
+        if (account) {
+          const playerStats = await getPlayerStats(account.address);
+          setStats({
+            heads: Math.floor(playerStats.wins / 2), // Approximate
+            tails: Math.floor(playerStats.losses / 2),
+            total: playerStats.total,
+          });
+        }
+      } catch (err) {
+        console.error("Error loading data:", err);
+      }
+    };
+
+    if (isConnected) {
+      loadData();
+      getFlipBalance();
+    }
+  }, [isConnected, account]);
 
   const handleCustomAmount = (value: string) => {
     setCustomAmount(value);
@@ -67,93 +100,63 @@ export default function CoinFlipOnChain() {
       return;
     }
 
-    if (betAmount <= 0) {
-      setMessage("⚠️ Please enter a valid bet amount!");
+    if (betAmount <= 0 || betAmount < MINIMUM_FLIP_TO_BET) {
+      setMessage(`⚠️ Minimum bet is ${MINIMUM_FLIP_TO_BET.toLocaleString()} $FLIP!`);
       return;
     }
 
-    // Calculate fee (1% of bet amount)
+    // Calculate fee (from platform fee bps)
     const fee = betAmount * BET_FEE_PERCENTAGE;
-    const totalCost = betAmount + fee;
 
-    if (flipBalance < totalCost) {
-      setMessage(`⚠️ Insufficient $FLIP! Need ${totalCost.toFixed(2)} $FLIP (bet + 1% fee)`);
+    if (flipBalance < betAmount) {
+      setMessage(`⚠️ Insufficient $FLIP! You have ${flipBalance.toLocaleString()} $FLIP but need ${betAmount.toLocaleString()} $FLIP`);
       return;
     }
 
     setIsFlipping(true);
-    setMessage(`Betting ${betAmount.toFixed(2)} $FLIP on ${selectedSide}... (${fee.toFixed(2)} $FLIP fee)`);
+    setMessage(`Betting ${betAmount.toFixed(2)} $FLIP on ${selectedSide}... (${fee.toFixed(2)} $FLIP platform fee)`);
     setResult(null);
 
     // Use selected side for the flip
     const choice = selectedSide === "heads";
     
-    // In demo mode, simulate the flip directly
-    if (demoMode) {
-      setMessage("⏳ Flipping coin...");
+    try {
+      // Place bet on-chain
+      const tx = await placeBet(betAmount, choice);
       
-      setTimeout(() => {
-        const isHeads = Math.random() < 0.5;
-        const outcome: CoinSide = isHeads ? "heads" : "tails";
-        const won = outcome === selectedSide;
+      if (tx) {
+        setMessage("⏳ Transaction sent! Waiting for confirmation...");
         
-        setResult(outcome);
-        
-        if (won) {
-          // Win: Transfer double the bet amount to user's wallet
-          const winAmount = betAmount * 2;
-          setFlipBalance(prev => prev - fee + winAmount); // Deduct fee, add winnings
-          setMessage(`🎉 You won! ${outcome === "heads" ? "Heads" : "Tails"}! +${winAmount.toFixed(2)} $FLIP (Fee: ${fee.toFixed(2)} $FLIP)`);
-        } else {
-          // Lose: Transfer bet to treasury, deduct fee
-          setFlipBalance(prev => prev - totalCost); // Deduct bet + fee
-          setMessage(`😔 You lost. ${outcome === "heads" ? "Heads" : "Tails"}. -${totalCost.toFixed(2)} $FLIP (Bet + Fee sent to treasury)`);
-        }
-        
-        setStats(prev => ({
-          heads: prev.heads + (isHeads ? 1 : 0),
-          tails: prev.tails + (isHeads ? 0 : 1),
-          total: prev.total + 1
-        }));
+        // Wait a bit and then fetch updated stats
+        setTimeout(async () => {
+          try {
+            // Refresh balance
+            await getFlipBalance();
+            
+            // Update stats from contract
+            if (account) {
+              const playerStats = await getPlayerStats(account.address);
+              setStats({
+                heads: Math.floor(playerStats.wins / 2),
+                tails: Math.floor(playerStats.losses / 2),
+                total: playerStats.total,
+              });
+            }
+            
+            setMessage(`✅ Bet placed successfully! Check your transaction for results.`);
+            setIsFlipping(false);
+          } catch (err) {
+            console.error("Error refreshing data:", err);
+            setIsFlipping(false);
+          }
+        }, 3000);
+      } else {
+        setMessage(error || "❌ Transaction failed");
         setIsFlipping(false);
-      }, 2000);
-      return;
-    }
-    
-    // Real wallet mode - interact with contract
-    const tx = await flipCoinOnChain(choice);
-    
-    if (tx) {
-      setMessage("⏳ Transaction sent! Waiting for confirmation...");
-      
-      // Simulate waiting for confirmation
-      setTimeout(() => {
-        const isHeads = Math.random() < 0.5;
-        const outcome: CoinSide = isHeads ? "heads" : "tails";
-        const won = outcome === selectedSide;
-        
-        setResult(outcome);
-        
-        if (won) {
-          // Win: Transfer double the bet amount to user's wallet
-          const winAmount = betAmount * 2;
-          setFlipBalance(prev => prev - fee + winAmount); // Deduct fee, add winnings
-          setMessage(`🎉 You won! ${outcome === "heads" ? "Heads" : "Tails"}! +${winAmount.toFixed(2)} $FLIP (Fee: ${fee.toFixed(2)} $FLIP)`);
-        } else {
-          // Lose: Transfer bet to treasury, deduct fee
-          setFlipBalance(prev => prev - totalCost); // Deduct bet + fee
-          setMessage(`😔 You lost. ${outcome === "heads" ? "Heads" : "Tails"}. -${totalCost.toFixed(2)} $FLIP (Bet + Fee sent to treasury)`);
-        }
-        
-        setStats(prev => ({
-          heads: prev.heads + (isHeads ? 1 : 0),
-          tails: prev.tails + (isHeads ? 0 : 1),
-          total: prev.total + 1
-        }));
-        setIsFlipping(false);
-      }, 2000);
-    } else {
-      setMessage(error || "❌ Transaction failed");
+      }
+    } catch (err) {
+      console.error("Error placing bet:", err);
+      setMessage("❌ Failed to place bet. Please try again.");
       setIsFlipping(false);
     }
   };
@@ -166,32 +169,8 @@ export default function CoinFlipOnChain() {
           onClick={() => window.open(`https://matcha.xyz/tokens/base/0x9d8eCa05F0FD5486916471c2145e32cdBF5112dF`, '_blank')}
           className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-lg sm:text-xl font-bold rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 active:scale-95 min-h-[60px]"
         >
-          💎 Step 1: Buy Native Token ($FLIP)
+          💎 Buy $FLIP Tokens
         </button>
-        
-        {/* Demo/Testing: Simulate token balance */}
-        {effectiveIsConnected && (
-          <div className="flex gap-2">
-            <button
-              onClick={() => simulateAddFlip(1000)}
-              className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-lg transition-all"
-            >
-              + 1,000 $FLIP (Demo)
-            </button>
-            <button
-              onClick={() => simulateAddFlip(10000)}
-              className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-lg transition-all"
-            >
-              + 10,000 $FLIP (Demo)
-            </button>
-            <button
-              onClick={() => simulateAddFlip(1000000)}
-              className="flex-1 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white text-sm font-semibold rounded-lg transition-all"
-            >
-              + 1M $FLIP (VIP Demo)
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Contract Address */}
@@ -231,16 +210,8 @@ export default function CoinFlipOnChain() {
       )}
 
       {!effectiveIsConnected && (
-        <div className="w-full space-y-3">
-          <div className="w-full text-center text-base sm:text-lg text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 px-4 py-3 rounded-lg">
-            Connect your wallet to start betting
-          </div>
-          <button
-            onClick={() => setDemoMode(true)}
-            className="w-full px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-semibold rounded-lg transition-all"
-          >
-            🔧 Demo Mode (Testing Only)
-          </button>
+        <div className="w-full text-center text-base sm:text-lg text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 px-4 py-3 rounded-lg">
+          Connect your wallet to start betting
         </div>
       )}
 
