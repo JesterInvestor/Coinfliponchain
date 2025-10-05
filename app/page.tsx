@@ -13,7 +13,7 @@ export default function Home() {
               Coin Flip Betting
             </h1>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
-              Bet USDC on Base Network
+              Bet $FLIP on Base Network
             </p>
           </div>
           <WalletConnect />
@@ -51,10 +51,10 @@ export default function Home() {
             <div className="bg-white dark:bg-gray-800 rounded-xl p-5 sm:p-6 shadow-lg text-center">
               <div className="text-4xl mb-3">💰</div>
               <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">
-                USDC Betting
+                $FLIP Betting
               </h3>
               <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
-                Bet with USDC stablecoin.
+                Bet with $FLIP token.
               </p>
             </div>
           </div>

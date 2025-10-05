@@ -135,7 +135,7 @@ export default function CoinFlipOnChain() {
       {/* Quick Bet Amounts */}
       <div className="w-full space-y-3">
         <h3 className="text-xl sm:text-2xl font-bold text-center text-gray-800 dark:text-white">
-          Select Bet Amount (USDC)
+          Select Bet Amount ($FLIP)
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {quickBetAmounts.map((amount) => (
@@ -164,7 +164,7 @@ export default function CoinFlipOnChain() {
           type="number"
           value={customAmount}
           onChange={(e) => handleCustomAmount(e.target.value)}
-          placeholder="Enter amount in USDC"
+          placeholder="Enter amount in $FLIP"
           disabled={isFlipping || !isConnected}
           className="w-full p-4 text-lg sm:text-xl text-center font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed min-h-[60px]"
           step="0.01"
@@ -203,7 +203,7 @@ export default function CoinFlipOnChain() {
       >
         {isFlipping || isOnChainFlipping 
           ? "🎲 Flipping..." 
-          : `🎯 Bet $${betAmount.toFixed(2)} USDC`}
+          : `🎯 Bet ${betAmount.toFixed(2)} $FLIP`}
       </button>
 
       {/* Buy Native Token Button */}
