@@ -141,6 +141,90 @@ export function useCoinFlip() {
   };
 
   /**
+   * Transfer tokens to another address
+   * Requires user to have at least 1000 $FLIP
+   */
+  const transferTokens = async (to: string, amount: number) => {
+    if (!account) {
+      setError("Please connect your wallet first");
+      return null;
+    }
+
+    try {
+      // Check if user has at least 1000 $FLIP
+      const balance = await getFlipBalance();
+      if (balance < 1000) {
+        setError("You need at least 1000 $FLIP to transfer tokens");
+        return null;
+      }
+
+      const amountInWei = BigInt(Math.floor(amount * 10**18));
+      
+      const transaction = prepareContractCall({
+        contract: tokenContract,
+        method: "function transfer(address to, uint256 amount) returns (bool)",
+        params: [to, amountInWei],
+      });
+
+      const result = await sendTransaction({
+        account,
+        transaction,
+      });
+
+      // Update balance after transfer
+      await getFlipBalance();
+
+      return result;
+    } catch (err) {
+      console.error("Error transferring tokens:", err);
+      setError(err instanceof Error ? err.message : "Failed to transfer tokens");
+      return null;
+    }
+  };
+
+  /**
+   * Transfer tokens from one address to another
+   * Requires user to have at least 1000 $FLIP
+   */
+  const transferFromTokens = async (from: string, to: string, amount: number) => {
+    if (!account) {
+      setError("Please connect your wallet first");
+      return null;
+    }
+
+    try {
+      // Check if user has at least 1000 $FLIP
+      const balance = await getFlipBalance();
+      if (balance < 1000) {
+        setError("You need at least 1000 $FLIP to transfer tokens");
+        return null;
+      }
+
+      const amountInWei = BigInt(Math.floor(amount * 10**18));
+      
+      const transaction = prepareContractCall({
+        contract: tokenContract,
+        method: "function transferFrom(address from, address to, uint256 amount) returns (bool)",
+        params: [from, to, amountInWei],
+      });
+
+      const result = await sendTransaction({
+        account,
+        transaction,
+      });
+
+      // Update balance after transfer
+      await getFlipBalance();
+
+      return result;
+    } catch (err) {
+      console.error("Error transferring tokens:", err);
+      setError(err instanceof Error ? err.message : "Failed to transfer tokens");
+      return null;
+    }
+  };
+
+  /**
    * Place a bet
    * @param amount Amount to bet
    * @param choice true for heads, false for tails
@@ -248,6 +332,8 @@ export function useCoinFlip() {
     getTokenSupply,
     getPlatformFeeInfo,
     approveTokens,
+    transferTokens,
+    transferFromTokens,
     flipBalance,
     isFlipping,
     error,
