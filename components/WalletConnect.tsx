@@ -36,7 +36,7 @@ export default function WalletConnect() {
         }}
         detailsModal={{
           // Configure the modal shown when connected wallet button is clicked
-          // Not setting displayBalanceToken ensures native token (ETH) balance is shown
+          // Displays wallet details, balance, and transaction options
         }}
         connectModal={{
           size: "wide",
