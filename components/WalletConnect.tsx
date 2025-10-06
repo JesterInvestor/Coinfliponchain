@@ -30,6 +30,14 @@ export default function WalletConnect() {
           label: "Connect Wallet",
           className: "!bg-blue-600 !text-white !px-8 !py-4 !rounded-lg !font-bold !text-lg !shadow-lg hover:!bg-blue-700 !transition-all !min-h-[56px]",
         }}
+        detailsButton={{
+          className: "!bg-white dark:!bg-gray-800 !text-gray-800 dark:!text-white !px-6 !py-3 !rounded-lg !font-semibold !text-base !shadow-lg hover:!bg-gray-50 dark:hover:!bg-gray-700 !transition-all !min-h-[56px]",
+          // Not setting displayBalanceToken ensures native token (ETH) balance is shown
+        }}
+        detailsModal={{
+          // Configure the modal shown when connected wallet button is clicked
+          // Not setting displayBalanceToken ensures native token (ETH) balance is shown
+        }}
         connectModal={{
           size: "wide",
           title: "Connect Your Wallet",
