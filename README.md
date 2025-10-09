@@ -22,13 +22,15 @@ A modern, on-chain coin flipping application built with Next.js, Thirdweb SDK, a
 - 🎮 **Interactive Gameplay** with intuitive bet selection and real-time feedback
 
 ### Gamification & Collectibles
-- 🏆 **Achievement System** with 12+ unlockable badges and milestones
+- 🏆 **Achievement System** with 15+ unlockable badges and milestones
 - 🎖️ **Achievement Categories** including:
   - Betting Milestones (First Flip, Bronze/Silver/Gold/Diamond Bettor)
   - Win Achievements (Lucky Beginner, Triple Win, Hot Streak, Unstoppable)
   - Volume Achievements (Small/Big/Mega Whale)
+  - Quest Achievements (Quest Beginner, Apprentice, Master)
 - 📊 **Progress Tracking** with visual progress bars and unlock notifications
 - 🎁 **Achievement Notifications** with animated popups on unlock
+- 🔄 **Swapping Quest** - Interactive guided experience for learning on-chain swaps
 
 ### Creator Support & Community
 - 💝 **Creator Tipping System** - Support your favorite creators directly with $FLIP
@@ -215,6 +217,7 @@ A comprehensive gamification system to keep users engaged:
 1. **Betting Milestones**: First Flip → Bronze → Silver → Gold → Diamond (1 to 500 bets)
 2. **Win Achievements**: Lucky Beginner, Triple Win, Hot Streak, Unstoppable
 3. **Volume Achievements**: Small/Big/Mega Whale (10K to 1M $FLIP wagered)
+4. **Quest Achievements**: Quest Beginner → Apprentice → Master (1K to 10K $FLIP swapped)
 
 **Features**:
 - Real-time progress tracking
@@ -228,6 +231,34 @@ A comprehensive gamification system to keep users engaged:
 - Automatic unlock detection based on user statistics
 - Modal popups for new achievements
 - Grid layout responsive to all screen sizes
+
+### Swapping Quest
+An interactive, gamified quest system that teaches users how to swap $FLIP tokens on-chain:
+
+**Quest Steps**:
+1. **Connect Wallet**: Connect your Web3 wallet to begin
+2. **Check Balance**: Verify you have sufficient $FLIP tokens
+3. **First Swap**: Complete your first swap (1,000 $FLIP)
+4. **Advanced Swap**: Execute a larger swap (5,000 $FLIP)
+5. **Quest Master**: Become a master by swapping 10,000 $FLIP
+
+**Features**:
+- Step-by-step guided experience
+- Real on-chain transactions with blockchain verification
+- Quick swap buttons (1K, 5K, 10K $FLIP) and custom amounts
+- Complete swap history with BaseScan links
+- Progress tracking with visual indicators
+- Achievement integration for quest completion
+- Optional custom recipient addresses
+- LocalStorage persistence for quest progress
+
+**Technical Details**:
+- Component: `components/SwappingQuest.tsx`
+- Uses ERC20 token transfer standard
+- Atomic and secure on-chain swaps
+- Transaction hash recording for verification
+- Integration with achievement system
+- See `SWAPPING_QUEST.md` for complete documentation
 
 ### Creator Support & Referral System
 Build and support your community:

@@ -9,7 +9,7 @@ interface Achievement {
   icon: string;
   requirement: number;
   unlocked: boolean;
-  category: "bets" | "wins" | "volume" | "streak";
+  category: "bets" | "wins" | "volume" | "streak" | "quest";
 }
 
 interface AchievementsProps {
@@ -17,9 +17,10 @@ interface AchievementsProps {
   totalWins: number;
   totalVolume: number;
   currentStreak?: number;
+  totalQuestSwaps?: number;
 }
 
-export default function Achievements({ totalBets, totalWins, totalVolume, currentStreak = 0 }: AchievementsProps) {
+export default function Achievements({ totalBets, totalWins, totalVolume, currentStreak = 0, totalQuestSwaps = 0 }: AchievementsProps) {
   const [achievements, setAchievements] = useState<Achievement[]>([
     // Betting Milestones
     { id: "first_bet", title: "First Flip", description: "Place your first bet", icon: "🎲", requirement: 1, unlocked: false, category: "bets" },
@@ -38,6 +39,11 @@ export default function Achievements({ totalBets, totalWins, totalVolume, curren
     { id: "whale_10k", title: "Small Whale", description: "Bet 10,000 $FLIP total", icon: "🐋", requirement: 10000, unlocked: false, category: "volume" },
     { id: "whale_100k", title: "Big Whale", description: "Bet 100,000 $FLIP total", icon: "🐳", requirement: 100000, unlocked: false, category: "volume" },
     { id: "whale_1m", title: "Mega Whale", description: "Bet 1,000,000 $FLIP total", icon: "🦈", requirement: 1000000, unlocked: false, category: "volume" },
+    
+    // Quest Achievements
+    { id: "quest_beginner", title: "Quest Beginner", description: "Complete first swap in quest", icon: "🔄", requirement: 1000, unlocked: false, category: "quest" },
+    { id: "quest_apprentice", title: "Quest Apprentice", description: "Swap 5,000 $FLIP in quests", icon: "⚡", requirement: 5000, unlocked: false, category: "quest" },
+    { id: "quest_master", title: "Quest Master", description: "Swap 10,000 $FLIP in quests", icon: "👑", requirement: 10000, unlocked: false, category: "quest" },
   ]);
 
   const [showModal, setShowModal] = useState(false);
@@ -60,6 +66,9 @@ export default function Achievements({ totalBets, totalWins, totalVolume, curren
         case "streak":
           currentValue = currentStreak;
           break;
+        case "quest":
+          currentValue = totalQuestSwaps;
+          break;
       }
       
       const shouldUnlock = currentValue >= achievement.requirement;
@@ -75,7 +84,7 @@ export default function Achievements({ totalBets, totalWins, totalVolume, curren
     });
     
     setAchievements(updatedAchievements);
-  }, [totalBets, totalWins, totalVolume, currentStreak]);
+  }, [totalBets, totalWins, totalVolume, currentStreak, totalQuestSwaps]);
 
   const unlockedCount = achievements.filter(a => a.unlocked).length;
   const totalCount = achievements.length;

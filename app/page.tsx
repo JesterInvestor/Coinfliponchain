@@ -1,18 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CoinFlipOnChain from "@/components/CoinFlipOnChain";
 import WalletConnect from "@/components/WalletConnect";
 import Achievements from "@/components/Achievements";
 import CreatorSupport from "@/components/CreatorSupport";
+import SwappingQuest from "@/components/SwappingQuest";
 
-type TabType = "game" | "achievements" | "creators";
+type TabType = "game" | "achievements" | "creators" | "quest";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>("game");
   const [totalBets, setTotalBets] = useState(0);
   const [totalWins, setTotalWins] = useState(0);
   const [totalVolume, setTotalVolume] = useState(0);
+  const [totalQuestSwaps, setTotalQuestSwaps] = useState(0);
+
+  // Load quest data from localStorage
+  useEffect(() => {
+    const loadQuestData = () => {
+      const stored = localStorage.getItem("swapQuestHistory");
+      if (stored) {
+        const history = JSON.parse(stored);
+        const total = history.reduce(
+          (sum: number, tx: { amount: number }) => sum + tx.amount,
+          0
+        );
+        setTotalQuestSwaps(total);
+      }
+    };
+
+    loadQuestData();
+    // Reload every 5 seconds to catch updates from the quest tab
+    const interval = setInterval(loadQuestData, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
@@ -48,6 +70,16 @@ export default function Home() {
               🎲 Play
             </button>
             <button
+              onClick={() => setActiveTab("quest")}
+              className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === "quest"
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+            >
+              🔄 Quest
+            </button>
+            <button
               onClick={() => setActiveTab("achievements")}
               className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
                 activeTab === "achievements"
@@ -72,11 +104,13 @@ export default function Home() {
           {/* Tab Content */}
           <div className="bg-white dark:bg-gray-800 rounded-b-2xl shadow-2xl p-4 sm:p-8">
             {activeTab === "game" && <CoinFlipOnChain />}
+            {activeTab === "quest" && <SwappingQuest />}
             {activeTab === "achievements" && (
               <Achievements
                 totalBets={totalBets}
                 totalWins={totalWins}
                 totalVolume={totalVolume}
+                totalQuestSwaps={totalQuestSwaps}
               />
             )}
             {activeTab === "creators" && (
