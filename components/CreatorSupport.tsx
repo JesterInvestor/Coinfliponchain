@@ -2,56 +2,22 @@
 
 import { useState } from "react";
 
-interface Creator {
-  address: string;
-  name: string;
-  avatar: string;
-  totalSupport: number;
-  supporters: number;
-}
-
 interface CreatorSupportProps {
   userAddress?: string;
   onTipCreator?: (creatorAddress: string, amount: number) => Promise<void>;
 }
 
 export default function CreatorSupport({ userAddress, onTipCreator }: CreatorSupportProps) {
-  const [selectedCreator, setSelectedCreator] = useState<string>("");
   const [tipAmount, setTipAmount] = useState<number>(1000);
   const [customCreatorAddress, setCustomCreatorAddress] = useState<string>("");
   const [showReferralCode, setShowReferralCode] = useState(false);
   const [isTipping, setIsTipping] = useState(false);
 
-  // Featured creators (could be loaded from API/contract)
-  const featuredCreators: Creator[] = [
-    {
-      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
-      name: "CryptoKing",
-      avatar: "👑",
-      totalSupport: 50000,
-      supporters: 42
-    },
-    {
-      address: "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199",
-      name: "FlipMaster",
-      avatar: "🎲",
-      totalSupport: 35000,
-      supporters: 28
-    },
-    {
-      address: "0xdD2FD4581271e230360230F9337D5c0430Bf44C0",
-      name: "LuckyWhale",
-      avatar: "🐋",
-      totalSupport: 75000,
-      supporters: 61
-    }
-  ];
-
   const handleTipCreator = async () => {
-    const targetAddress = selectedCreator || customCreatorAddress;
+    const targetAddress = customCreatorAddress;
     
     if (!targetAddress || !tipAmount) {
-      alert("Please select a creator and enter a tip amount");
+      alert("Please enter a creator address and tip amount");
       return;
     }
 
@@ -95,49 +61,16 @@ export default function CreatorSupport({ userAddress, onTipCreator }: CreatorSup
         </p>
       </div>
 
-      {/* Featured Creators */}
-      <div className="space-y-3">
-        <h3 className="text-lg font-bold text-neutral-800 dark:text-white">Featured Creators</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {featuredCreators.map((creator) => (
-            <button
-              key={creator.address}
-              onClick={() => setSelectedCreator(creator.address)}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                selectedCreator === creator.address
-                  ? "bg-stone-100 dark:bg-stone-900/30 border-stone-600 scale-105"
-                  : "bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 hover:border-stone-400"
-              }`}
-            >
-              <div className="text-4xl mb-2">{creator.avatar}</div>
-              <h4 className="font-bold text-neutral-800 dark:text-white">{creator.name}</h4>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1 truncate">
-                {creator.address.slice(0, 10)}...
-              </p>
-              <div className="mt-2 text-sm">
-                <p className="text-stone-700 dark:text-stone-400 font-semibold">
-                  {creator.totalSupport.toLocaleString()} $FLIP
-                </p>
-                <p className="text-neutral-600 dark:text-neutral-400 text-xs">
-                  {creator.supporters} supporters
-                </p>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Custom Creator Address */}
       <div className="space-y-2">
         <label className="block text-sm font-semibold text-neutral-800 dark:text-white">
-          Or Enter Creator Address
+          Enter Creator Address
         </label>
         <input
           type="text"
           value={customCreatorAddress}
           onChange={(e) => {
             setCustomCreatorAddress(e.target.value);
-            setSelectedCreator("");
           }}
           placeholder="0x..."
           className="w-full p-3 rounded-lg border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-white focus:border-stone-600 focus:ring-2 focus:ring-stone-500"
@@ -176,7 +109,7 @@ export default function CreatorSupport({ userAddress, onTipCreator }: CreatorSup
       {/* Tip Button */}
       <button
         onClick={handleTipCreator}
-        disabled={isTipping || (!selectedCreator && !customCreatorAddress)}
+        disabled={isTipping || !customCreatorAddress}
         className="w-full py-4 bg-gradient-to-r from-stone-700 to-stone-800 hover:from-stone-800 hover:to-stone-900 disabled:from-neutral-400 disabled:to-neutral-500 text-white font-bold rounded-xl shadow-lg transition-all disabled:cursor-not-allowed"
       >
         {isTipping ? "Sending Tip..." : `💝 Tip ${tipAmount.toLocaleString()} $FLIP`}

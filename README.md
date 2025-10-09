@@ -33,8 +33,7 @@ A modern, on-chain coin flipping application built with Next.js, Thirdweb SDK, a
 - 🔄 **Swapping Quest** - Interactive guided experience for learning on-chain swaps
 
 ### Creator Support & Community
-- 💝 **Creator Tipping System** - Support your favorite creators directly with $FLIP
-- 🎯 **Featured Creators** showcase with supporter counts and total support
+- 💝 **Creator Tipping System** - Support creators directly with $FLIP by entering their wallet address
 - 🔗 **Referral System** - Become a creator and earn 5% of referred user bets
 - 📋 **Easy Sharing** with one-click referral link copying
 - 👥 **Community Building** tools for content creators and influencers
@@ -274,12 +273,6 @@ Build and support your community:
 - One-click link copying for easy sharing
 - Earn 5% commission on referred user bets (implementation ready)
 - Track supporters and total support received
-
-**Featured Creators**:
-- Showcase top creators with stats
-- Display total support and supporter count
-- Avatar/icon representation
-- Click to select for tipping
 
 **How to Become a Creator**:
 1. Connect your wallet
