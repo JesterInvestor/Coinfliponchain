@@ -14,6 +14,8 @@ export default function CoinFlipOnChain() {
   const [betAmount, setBetAmount] = useState<number>(1000);
   const [customAmount, setCustomAmount] = useState<string>("");
   const [platformFeeBps, setPlatformFeeBps] = useState<number>(100); // 1% default
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [useEnhancedAnimation, setUseEnhancedAnimation] = useState(true);
 
   const { 
     placeBet, 
@@ -292,8 +294,8 @@ export default function CoinFlipOnChain() {
       <div className="relative w-40 h-40 sm:w-48 sm:h-48 flex items-center justify-center my-4">
         <div
           className={`w-full h-full rounded-full bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 shadow-2xl flex items-center justify-center text-5xl sm:text-6xl font-bold text-white transition-all duration-500 ${
-            isFlipping ? "animate-spin-slow" : ""
-          }`}
+            isFlipping ? (useEnhancedAnimation ? "animate-flip-3d" : "animate-spin-slow") : ""
+          } ${showCelebration ? "animate-glow" : ""}`}
           style={{
             transform: isFlipping 
               ? "rotateY(1800deg)" 
@@ -304,6 +306,41 @@ export default function CoinFlipOnChain() {
         >
           {!isFlipping && (result === "tails" ? "⚡" : "👑")}
         </div>
+        {/* Particle effects container */}
+        {isFlipping && (
+          <div className="absolute inset-0 pointer-events-none">
+            {[...Array(8)].map((_, i) => {
+              const angle = (i * 45 * Math.PI) / 180;
+              const tx = Math.cos(angle) * 100;
+              const ty = Math.sin(angle) * 100;
+              return (
+                <div
+                  key={i}
+                  className="particle bg-yellow-400"
+                  style={{
+                    left: '50%',
+                    top: '50%',
+                    '--tx': `${tx}px`,
+                    '--ty': `${ty}px`,
+                  } as React.CSSProperties}
+                />
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Animation Settings */}
+      <div className="w-full flex items-center justify-center gap-3 py-2">
+        <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={useEnhancedAnimation}
+            onChange={(e) => setUseEnhancedAnimation(e.target.checked)}
+            className="w-4 h-4 rounded"
+          />
+          <span>Enhanced 3D Animation</span>
+        </label>
       </div>
 
       {/* Result Message */}
