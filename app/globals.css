@@ -2,7 +2,14 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a1a1a;
+  --brass: #B8860B;
+  --brass-light: #DAA520;
+  --brass-dark: #8B6914;
+  --silver: #C0C0C0;
+  --silver-light: #E8E8E8;
+  --silver-dark: #A8A9AD;
+  --brown: #8B4513;
 }
 
 @theme inline {
@@ -12,8 +19,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1a1a1a;
+    --foreground: #E8E8E8;
   }
 }
 
@@ -84,10 +91,10 @@ body {
 /* Glow effect for winning */
 @keyframes glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
+    box-shadow: 0 0 20px rgba(184, 134, 11, 0.5);
   }
   50% {
-    box-shadow: 0 0 40px rgba(234, 179, 8, 0.8), 0 0 60px rgba(234, 179, 8, 0.6);
+    box-shadow: 0 0 40px rgba(184, 134, 11, 0.8), 0 0 60px rgba(184, 134, 11, 0.6);
   }
 }
 

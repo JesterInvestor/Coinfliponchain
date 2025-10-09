@@ -28,10 +28,10 @@ export default function WalletConnect() {
         wallets={wallets}
         connectButton={{
           label: "Connect Wallet",
-          className: "!bg-blue-600 !text-white !px-8 !py-4 !rounded-lg !font-bold !text-lg !shadow-lg hover:!bg-blue-700 !transition-all !min-h-[56px]",
+          className: "!bg-gradient-to-r !from-amber-700 !to-yellow-800 !text-white !px-8 !py-4 !rounded-lg !font-bold !text-lg !shadow-lg hover:!from-amber-800 hover:!to-yellow-900 !transition-all !min-h-[56px]",
         }}
         detailsButton={{
-          className: "!bg-white dark:!bg-gray-800 !text-gray-800 dark:!text-white !px-6 !py-3 !rounded-lg !font-semibold !text-base !shadow-lg hover:!bg-gray-50 dark:hover:!bg-gray-700 !transition-all !min-h-[56px]",
+          className: "!bg-white dark:!bg-neutral-800 !text-neutral-800 dark:!text-white !px-6 !py-3 !rounded-lg !font-semibold !text-base !shadow-lg hover:!bg-neutral-50 dark:hover:!bg-neutral-700 !transition-all !min-h-[56px] !border !border-neutral-300 dark:!border-neutral-600",
           // Not setting displayBalanceToken ensures native token (ETH) balance is shown
         }}
         detailsModal={{

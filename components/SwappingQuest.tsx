@@ -217,7 +217,7 @@ export default function SwappingQuest() {
   return (
     <div className="w-full space-y-6">
       {/* Quest Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white">
+      <div className="bg-gradient-to-r from-amber-700 to-yellow-800 rounded-xl p-6 text-white border border-amber-900">
         <h2 className="text-3xl font-bold mb-2">🔄 $FLIP Swapping Quest</h2>
         <p className="text-sm opacity-90 mb-4">
           Complete swapping challenges and master the art of on-chain token swaps
@@ -237,14 +237,14 @@ export default function SwappingQuest() {
       {showSuccessModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
           <div className="absolute inset-0 bg-black/50" onClick={() => setShowSuccessModal(false)} />
-          <div className="relative bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-8 shadow-2xl animate-bounce">
+          <div className="relative bg-gradient-to-br from-amber-600 to-yellow-700 rounded-2xl p-8 shadow-2xl animate-bounce border-4 border-amber-900">
             <div className="text-center text-white">
               <div className="text-6xl mb-4">🎉</div>
               <h3 className="text-2xl font-bold mb-2">Quest Step Completed!</h3>
               <p className="text-lg">{completedStepTitle}</p>
               <button
                 onClick={() => setShowSuccessModal(false)}
-                className="mt-4 px-6 py-2 bg-white text-orange-600 rounded-lg font-semibold hover:bg-gray-100"
+                className="mt-4 px-6 py-2 bg-white text-amber-800 rounded-lg font-semibold hover:bg-neutral-100"
               >
                 Continue
               </button>
@@ -255,15 +255,15 @@ export default function SwappingQuest() {
 
       {/* Quest Stats */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Swapped</p>
-          <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg p-4 shadow-md border border-neutral-200 dark:border-neutral-700">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Total Swapped</p>
+          <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">
             {totalSwapped.toLocaleString()} $FLIP
           </p>
         </div>
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Swap Count</p>
-          <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+        <div className="bg-white dark:bg-neutral-800 rounded-lg p-4 shadow-md border border-neutral-200 dark:border-neutral-700">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Swap Count</p>
+          <p className="text-2xl font-bold text-stone-700 dark:text-stone-400">
             {swapHistory.length}
           </p>
         </div>
@@ -276,24 +276,24 @@ export default function SwappingQuest() {
             key={step.id}
             className={`p-4 rounded-lg border-2 transition-all ${
               step.completed
-                ? "bg-green-50 dark:bg-green-900/20 border-green-500"
+                ? "bg-amber-50 dark:bg-amber-900/20 border-amber-600"
                 : step.id === currentStep
-                ? "bg-blue-50 dark:bg-blue-900/20 border-blue-500 shadow-lg"
-                : "bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+                ? "bg-stone-50 dark:bg-stone-900/20 border-stone-600 shadow-lg"
+                : "bg-neutral-50 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600"
             }`}
           >
             <div className="flex items-start justify-between">
               <div className="flex items-start space-x-3 flex-1">
                 <div className="text-3xl">{step.icon}</div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg text-gray-800 dark:text-white">
+                  <h3 className="font-bold text-lg text-neutral-800 dark:text-white">
                     {step.title}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
                     {step.description}
                   </p>
                   {step.requirement && (
-                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-500 mt-1">
                       Requirement: {step.requirement.toLocaleString()} $FLIP
                     </p>
                   )}
@@ -301,7 +301,7 @@ export default function SwappingQuest() {
               </div>
               <div>
                 {step.completed ? (
-                  <div className="bg-green-500 text-white rounded-full p-2">
+                  <div className="bg-amber-700 text-white rounded-full p-2">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
@@ -311,11 +311,11 @@ export default function SwappingQuest() {
                     </svg>
                   </div>
                 ) : step.id === currentStep ? (
-                  <div className="bg-blue-500 text-white rounded-full px-3 py-1 text-sm font-semibold">
+                  <div className="bg-stone-700 text-white rounded-full px-3 py-1 text-sm font-semibold">
                     Active
                   </div>
                 ) : (
-                  <div className="bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-400 rounded-full p-2">
+                  <div className="bg-neutral-300 dark:bg-neutral-600 text-neutral-600 dark:text-neutral-400 rounded-full p-2">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
@@ -333,22 +333,22 @@ export default function SwappingQuest() {
 
       {/* Swap Interface */}
       {isConnected ? (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg space-y-4">
-          <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-lg space-y-4 border border-neutral-200 dark:border-neutral-700">
+          <h3 className="text-xl font-bold text-neutral-800 dark:text-white mb-4">
             🔄 Perform Swap
           </h3>
 
           {/* Current Balance */}
-          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Your Balance</p>
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+          <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4 border border-amber-300 dark:border-amber-700">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Your Balance</p>
+            <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">
               {flipBalance.toLocaleString()} $FLIP
             </p>
           </div>
 
           {/* Quick Swap Buttons */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
               Quick Swap Amounts
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -356,10 +356,10 @@ export default function SwappingQuest() {
                 <button
                   key={amount}
                   onClick={() => setSwapAmount(amount)}
-                  className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                  className={`py-3 px-4 rounded-lg font-semibold transition-all border-2 ${
                     swapAmount === amount
-                      ? "bg-blue-600 text-white shadow-md"
-                      : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600"
+                      ? "bg-amber-700 text-white shadow-md border-amber-800"
+                      : "bg-neutral-200 dark:bg-neutral-700 text-neutral-800 dark:text-white hover:bg-neutral-300 dark:hover:bg-neutral-600 border-neutral-300 dark:border-neutral-600"
                   }`}
                 >
                   {amount.toLocaleString()}
@@ -370,7 +370,7 @@ export default function SwappingQuest() {
 
           {/* Custom Amount */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
               Or Enter Custom Amount
             </label>
             <input
@@ -378,14 +378,14 @@ export default function SwappingQuest() {
               value={swapAmount}
               onChange={(e) => setSwapAmount(Number(e.target.value))}
               placeholder="Enter amount"
-              className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:border-blue-500 focus:outline-none"
+              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-800 dark:text-white focus:border-amber-600 focus:outline-none"
               min="1000"
             />
           </div>
 
           {/* Recipient Address (Optional) */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
               Recipient Address (Optional)
             </label>
             <input
@@ -393,7 +393,7 @@ export default function SwappingQuest() {
               value={recipientAddress}
               onChange={(e) => setRecipientAddress(e.target.value)}
               placeholder="0x... (leave empty for quest default)"
-              className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:border-blue-500 focus:outline-none font-mono text-sm"
+              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-800 dark:text-white focus:border-amber-600 focus:outline-none font-mono text-sm"
             />
           </div>
 
@@ -401,7 +401,7 @@ export default function SwappingQuest() {
           <button
             onClick={() => handleSwap(swapAmount)}
             disabled={isSwapping || swapAmount < 1000 || swapAmount > flipBalance}
-            className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold rounded-lg shadow-lg transform transition-all hover:scale-105 active:scale-95 disabled:scale-100 disabled:cursor-not-allowed"
+            className="w-full py-4 bg-gradient-to-r from-amber-700 to-yellow-800 hover:from-amber-800 hover:to-yellow-900 disabled:from-neutral-400 disabled:to-neutral-500 text-white font-bold rounded-lg shadow-lg transform transition-all hover:scale-105 active:scale-95 disabled:scale-100 disabled:cursor-not-allowed"
           >
             {isSwapping ? "⏳ Swapping..." : `🔄 Swap ${swapAmount.toLocaleString()} $FLIP`}
           </button>
@@ -411,10 +411,10 @@ export default function SwappingQuest() {
             <div
               className={`p-3 rounded-lg text-center ${
                 message.includes("✅")
-                  ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200"
+                  ? "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"
                   : message.includes("⏳")
-                  ? "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
-                  : "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200"
+                  ? "bg-stone-100 dark:bg-stone-900/30 text-stone-800 dark:text-stone-200"
+                  : "bg-neutral-100 dark:bg-neutral-900/30 text-neutral-800 dark:text-neutral-200"
               }`}
             >
               {message}
@@ -422,8 +422,8 @@ export default function SwappingQuest() {
           )}
         </div>
       ) : (
-        <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-6 text-center">
-          <p className="text-orange-600 dark:text-orange-400 font-semibold">
+        <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-6 text-center border border-amber-300 dark:border-amber-700">
+          <p className="text-amber-800 dark:text-amber-400 font-semibold">
             🔗 Connect your wallet to start the quest
           </p>
         </div>
@@ -431,8 +431,8 @@ export default function SwappingQuest() {
 
       {/* Swap History */}
       {swapHistory.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
-          <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-lg border border-neutral-200 dark:border-neutral-700">
+          <h3 className="text-xl font-bold text-neutral-800 dark:text-white mb-4">
             📜 Swap History
           </h3>
           <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -442,13 +442,13 @@ export default function SwappingQuest() {
               .map((tx, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-700 rounded-lg"
                 >
                   <div>
-                    <p className="font-semibold text-gray-800 dark:text-white">
+                    <p className="font-semibold text-neutral-800 dark:text-white">
                       {tx.amount.toLocaleString()} $FLIP
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
                       {new Date(tx.timestamp).toLocaleString()}
                     </p>
                   </div>
@@ -456,7 +456,7 @@ export default function SwappingQuest() {
                     href={`https://basescan.org/tx/${tx.txHash}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+                    className="text-amber-700 dark:text-amber-400 hover:underline text-sm"
                   >
                     View TX ↗
                   </a>
@@ -468,7 +468,7 @@ export default function SwappingQuest() {
 
       {/* Quest Completion Message */}
       {currentStep === 6 && (
-        <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-6 text-center text-white">
+        <div className="bg-gradient-to-r from-amber-600 to-yellow-700 rounded-xl p-6 text-center text-white border-4 border-amber-900">
           <div className="text-6xl mb-4">🏆</div>
           <h3 className="text-2xl font-bold mb-2">Congratulations!</h3>
           <p className="text-lg">
@@ -481,9 +481,9 @@ export default function SwappingQuest() {
       )}
 
       {/* Info Section */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-        <h4 className="font-semibold text-gray-800 dark:text-white mb-2">ℹ️ About Swapping Quests</h4>
-        <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+      <div className="bg-stone-50 dark:bg-stone-900/20 rounded-lg p-4 border border-stone-300 dark:border-stone-700">
+        <h4 className="font-semibold text-neutral-800 dark:text-white mb-2">ℹ️ About Swapping Quests</h4>
+        <ul className="text-sm text-neutral-600 dark:text-neutral-400 space-y-1">
           <li>• All swaps are executed on-chain and recorded on the blockchain</li>
           <li>• Minimum swap amount: 1,000 $FLIP</li>
           <li>• Each swap is verified and permanently stored</li>
