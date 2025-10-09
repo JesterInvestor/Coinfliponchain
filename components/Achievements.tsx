@@ -41,9 +41,9 @@ export default function Achievements({ totalBets, totalWins, totalVolume, curren
     { id: "whale_1m", title: "Mega Whale", description: "Bet 1,000,000 $FLIP total", icon: "🦈", requirement: 1000000, unlocked: false, category: "volume" },
     
     // Quest Achievements
-    { id: "quest_beginner", title: "Quest Beginner", description: "Complete first swap in quest", icon: "🔄", requirement: 1000, unlocked: false, category: "quest" },
-    { id: "quest_apprentice", title: "Quest Apprentice", description: "Swap 5,000 $FLIP in quests", icon: "⚡", requirement: 5000, unlocked: false, category: "quest" },
-    { id: "quest_master", title: "Quest Master", description: "Swap 10,000 $FLIP in quests", icon: "👑", requirement: 10000, unlocked: false, category: "quest" },
+    { id: "quest_beginner", title: "Quest Beginner", description: "Complete first swap in quest", icon: "🔄", requirement: 10000, unlocked: false, category: "quest" },
+    { id: "quest_apprentice", title: "Quest Apprentice", description: "Swap 100,000 $FLIP in quests", icon: "⚡", requirement: 100000, unlocked: false, category: "quest" },
+    { id: "quest_master", title: "Quest Master", description: "Swap 1,000,000 $FLIP in quests", icon: "👑", requirement: 1000000, unlocked: false, category: "quest" },
   ]);
 
   const [showModal, setShowModal] = useState(false);

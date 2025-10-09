@@ -41,42 +41,42 @@ export default function SwappingQuest() {
     {
       id: 2,
       title: "Check $FLIP Balance",
-      description: "Ensure you have at least 1,000 $FLIP tokens",
+      description: "Ensure you have at least 10,000 $FLIP tokens",
       icon: "💰",
       completed: false,
-      requirement: 1000,
+      requirement: 10000,
     },
     {
       id: 3,
       title: "Perform First Swap",
-      description: "Swap 1,000 $FLIP to complete this quest step",
+      description: "Swap 10,000 $FLIP to complete this quest step",
       icon: "🔄",
-      completed: false,
-      action: "swap",
-      requirement: 1000,
-    },
-    {
-      id: 4,
-      title: "Complete Advanced Swap",
-      description: "Swap 5,000 $FLIP for advanced completion",
-      icon: "⚡",
-      completed: false,
-      action: "swap",
-      requirement: 5000,
-    },
-    {
-      id: 5,
-      title: "Quest Master",
-      description: "Swap 10,000 $FLIP to become a Quest Master",
-      icon: "👑",
       completed: false,
       action: "swap",
       requirement: 10000,
     },
+    {
+      id: 4,
+      title: "Complete Advanced Swap",
+      description: "Swap 100,000 $FLIP for advanced completion",
+      icon: "⚡",
+      completed: false,
+      action: "swap",
+      requirement: 100000,
+    },
+    {
+      id: 5,
+      title: "Quest Master",
+      description: "Swap 1,000,000 $FLIP to become a Quest Master",
+      icon: "👑",
+      completed: false,
+      action: "swap",
+      requirement: 1000000,
+    },
   ]);
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [swapAmount, setSwapAmount] = useState<number>(1000);
+  const [swapAmount, setSwapAmount] = useState<number>(10000);
   const [recipientAddress, setRecipientAddress] = useState<string>("");
   const [isSwapping, setIsSwapping] = useState(false);
   const [message, setMessage] = useState<string>("");
@@ -100,11 +100,11 @@ export default function SwappingQuest() {
             completed: isConnected && flipBalance >= (step.requirement || 0),
           };
         case 3:
-          return { ...step, completed: totalSwapped >= 1000 };
-        case 4:
-          return { ...step, completed: totalSwapped >= 5000 };
-        case 5:
           return { ...step, completed: totalSwapped >= 10000 };
+        case 4:
+          return { ...step, completed: totalSwapped >= 100000 };
+        case 5:
+          return { ...step, completed: totalSwapped >= 1000000 };
         default:
           return step;
       }
@@ -146,8 +146,8 @@ export default function SwappingQuest() {
       return;
     }
 
-    if (amount < 1000) {
-      setMessage("❌ Minimum swap amount is 1,000 $FLIP");
+    if (amount < 10000) {
+      setMessage("❌ Minimum swap amount is 10,000 $FLIP");
       return;
     }
 
@@ -212,7 +212,7 @@ export default function SwappingQuest() {
     return (completedCount / questSteps.length) * 100;
   };
 
-  const quickSwapAmounts = [1000, 5000, 10000];
+  const quickSwapAmounts = [10000, 100000, 1000000];
 
   return (
     <div className="w-full space-y-6">
@@ -379,7 +379,7 @@ export default function SwappingQuest() {
               onChange={(e) => setSwapAmount(Number(e.target.value))}
               placeholder="Enter amount"
               className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-800 dark:text-white focus:border-amber-600 focus:outline-none"
-              min="1000"
+              min="10000"
             />
           </div>
 
@@ -400,7 +400,7 @@ export default function SwappingQuest() {
           {/* Swap Button */}
           <button
             onClick={() => handleSwap(swapAmount)}
-            disabled={isSwapping || swapAmount < 1000 || swapAmount > flipBalance}
+            disabled={isSwapping || swapAmount < 10000 || swapAmount > flipBalance}
             className="w-full py-4 bg-gradient-to-r from-amber-700 to-yellow-800 hover:from-amber-800 hover:to-yellow-900 disabled:from-neutral-400 disabled:to-neutral-500 text-white font-bold rounded-lg shadow-lg transform transition-all hover:scale-105 active:scale-95 disabled:scale-100 disabled:cursor-not-allowed"
           >
             {isSwapping ? "⏳ Swapping..." : `🔄 Swap ${swapAmount.toLocaleString()} $FLIP`}
@@ -485,7 +485,7 @@ export default function SwappingQuest() {
         <h4 className="font-semibold text-neutral-800 dark:text-white mb-2">ℹ️ About Swapping Quests</h4>
         <ul className="text-sm text-neutral-600 dark:text-neutral-400 space-y-1">
           <li>• All swaps are executed on-chain and recorded on the blockchain</li>
-          <li>• Minimum swap amount: 1,000 $FLIP</li>
+          <li>• Minimum swap amount: 10,000 $FLIP</li>
           <li>• Each swap is verified and permanently stored</li>
           <li>• Progress is saved locally and persists across sessions</li>
           <li>• Only $FLIP token pairs are supported in this quest</li>
