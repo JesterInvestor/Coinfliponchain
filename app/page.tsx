@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CoinFlipOnChain from "@/components/CoinFlipOnChain";
 import WalletConnect from "@/components/WalletConnect";
 import Achievements from "@/components/Achievements";
@@ -14,6 +14,27 @@ export default function Home() {
   const [totalBets, setTotalBets] = useState(0);
   const [totalWins, setTotalWins] = useState(0);
   const [totalVolume, setTotalVolume] = useState(0);
+  const [totalQuestSwaps, setTotalQuestSwaps] = useState(0);
+
+  // Load quest data from localStorage
+  useEffect(() => {
+    const loadQuestData = () => {
+      const stored = localStorage.getItem("swapQuestHistory");
+      if (stored) {
+        const history = JSON.parse(stored);
+        const total = history.reduce(
+          (sum: number, tx: { amount: number }) => sum + tx.amount,
+          0
+        );
+        setTotalQuestSwaps(total);
+      }
+    };
+
+    loadQuestData();
+    // Reload every 5 seconds to catch updates from the quest tab
+    const interval = setInterval(loadQuestData, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
@@ -89,6 +110,7 @@ export default function Home() {
                 totalBets={totalBets}
                 totalWins={totalWins}
                 totalVolume={totalVolume}
+                totalQuestSwaps={totalQuestSwaps}
               />
             )}
             {activeTab === "creators" && (
