@@ -308,9 +308,27 @@ This project is open source and available under the MIT License.
 - [Base Network](https://base.org/)
 - [Next.js Documentation](https://nextjs.org/docs)
 
+## 📚 Additional Documentation
+
+- **[FEATURES.md](./FEATURES.md)** - Detailed documentation of all new features including animations, achievements, and creator support
+- **[USER_GUIDE.md](./USER_GUIDE.md)** - Comprehensive user guide with step-by-step instructions, tips, and troubleshooting
+- **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Instructions for deploying the application
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Technical architecture and design decisions
+- **[contracts/README.md](./contracts/README.md)** - Smart contract documentation
+
 ## 📞 Support
 
-For questions or support, please open an issue on GitHub.
+For questions or support:
+- Check [USER_GUIDE.md](./USER_GUIDE.md) for common questions and troubleshooting
+- Review [FEATURES.md](./FEATURES.md) for feature-specific documentation
+- Open an issue on GitHub for bugs or feature requests
+
+## 🤝 For Developers
+
+Want to contribute or customize?
+- See [FEATURES.md](./FEATURES.md) for customization guides
+- Check [ARCHITECTURE.md](./ARCHITECTURE.md) for technical details
+- Review [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines
 
 ---
 
