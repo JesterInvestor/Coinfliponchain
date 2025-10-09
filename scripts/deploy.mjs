@@ -46,7 +46,9 @@ async function main() {
   const feeRecipient = (feeRecipRaw && feeRecipRaw.trim() !== "") ? feeRecipRaw.trim() : defaultFeeRecipient;
   const feeBps = BigInt(requireEnv("PLATFORM_FEE_BPS", bpsRaw));
 
-  console.log("Deploying CoinFlipBetting with:");
+  const contractName = process.env.CONTRACT_NAME || process.argv.find((a) => a.startsWith("--contract="))?.split("=")[1] || "CoinFlipBetting";
+
+  console.log(`Deploying ${contractName} with:`);
   console.log("  Network:", targetNetwork);
   console.log("  FLIP_TOKEN_ADDRESS:", flip);
   console.log("  TREASURY_ADDRESS:", treasury);
@@ -56,7 +58,9 @@ async function main() {
   console.log("Deployer:", wallet.address);
 
   // Load artifact ABI/bytecode
-  const artifactPath = join(process.cwd(), "artifacts", "contracts", "CoinFlipBetting.sol", "CoinFlipBetting.json");
+  const sourceFile = contractName === "CoinFlipBettingV2" ? "CoinFlipBettingV2.sol" : "CoinFlipBetting.sol";
+  const artifactFile = `${contractName}.json`;
+  const artifactPath = join(process.cwd(), "artifacts", "contracts", sourceFile, artifactFile);
   const artifact = JSON.parse(readFileSync(artifactPath, "utf8"));
   const factory = new ethers.ContractFactory(artifact.abi, artifact.bytecode, wallet);
   const contract = await factory.deploy(flip, treasury, feeRecipient, feeBps);
@@ -64,7 +68,7 @@ async function main() {
   const deployed = await contract.waitForDeployment();
 
   const address = await deployed.getAddress();
-  console.log("CoinFlipBetting deployed at:", address);
+  console.log(`${contractName} deployed at:`, address);
 
   // Helpful output for Next.js env
   console.log("\nAdd these to your .env.local (Next.js):\n");

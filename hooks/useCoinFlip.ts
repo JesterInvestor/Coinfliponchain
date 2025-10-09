@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { parseUnits, formatUnits } from "ethers";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { getContract, prepareContractCall, sendTransaction, readContract } from "thirdweb";
 import { createThirdwebClient } from "thirdweb";
@@ -61,7 +62,7 @@ export function useCoinFlip() {
   // Update flipBalance state when balanceData changes
   useEffect(() => {
     if (balanceData && account) {
-      const balanceInTokens = Number(balanceData) / 10**18;
+      const balanceInTokens = Number(formatUnits(balanceData as bigint, 18));
       setFlipBalance(balanceInTokens);
     }
   }, [balanceData, account]);
@@ -81,8 +82,8 @@ export function useCoinFlip() {
         params: [account.address],
       });
 
-      // Convert from wei to token units (assuming 18 decimals)
-      const balanceInTokens = Number(balance) / 10**18;
+  // Convert from wei to token units (assuming 18 decimals)
+  const balanceInTokens = Number(formatUnits(balance as bigint, 18));
       setFlipBalance(balanceInTokens);
       return balanceInTokens;
     } catch (err) {
@@ -102,7 +103,7 @@ export function useCoinFlip() {
         params: [],
       });
 
-      return Number(supply) / 10**18;
+  return Number(formatUnits(supply as bigint, 18));
     } catch (err) {
       console.error("Error getting token supply:", err);
       return 0;
@@ -119,7 +120,7 @@ export function useCoinFlip() {
     }
 
     try {
-      const amountInWei = BigInt(Math.floor(amount * 10**18));
+  const amountInWei = parseUnits(amount.toString(), 18);
       
       const transaction = prepareContractCall({
         contract: tokenContract,
@@ -158,7 +159,7 @@ export function useCoinFlip() {
         return null;
       }
 
-      const amountInWei = BigInt(Math.floor(amount * 10**18));
+  const amountInWei = parseUnits(amount.toString(), 18);
       
       const transaction = prepareContractCall({
         contract: tokenContract,
@@ -200,7 +201,7 @@ export function useCoinFlip() {
         return null;
       }
 
-      const amountInWei = BigInt(Math.floor(amount * 10**18));
+  const amountInWei = parseUnits(amount.toString(), 18);
       
       const transaction = prepareContractCall({
         contract: tokenContract,

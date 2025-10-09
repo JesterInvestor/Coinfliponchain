@@ -9,6 +9,8 @@
     "compile:contracts": "npx hardhat compile",
     "deploy:base": "node ./scripts/clean-artifacts.mjs && npx hardhat run ./scripts/deploy.mjs --network base",
     "deploy:base:sepolia": "node ./scripts/clean-artifacts.mjs && npx hardhat run ./scripts/deploy.mjs --network baseSepolia",
+  "deploy:v2:base": "node ./scripts/clean-artifacts.mjs && CONTRACT_NAME=CoinFlipBettingV2 npx hardhat run ./scripts/deploy.mjs --network base -- --contract=CoinFlipBettingV2",
+  "deploy:v2:base:sepolia": "node ./scripts/clean-artifacts.mjs && CONTRACT_NAME=CoinFlipBettingV2 npx hardhat run ./scripts/deploy.mjs --network baseSepolia -- --contract=CoinFlipBettingV2",
     "artifacts:clean": "node ./scripts/clean-artifacts.mjs"
   },
   "dependencies": {
