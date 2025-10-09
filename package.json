@@ -16,20 +16,20 @@
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "thirdweb": "^5.108.8"
+    "thirdweb": "^5.108.8",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
   },
   "devDependencies": {
     "@thirdweb-dev/contracts": "^3.15.0",
     "@nomicfoundation/hardhat-ethers": "^4.0.1",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "dotenv": "^17.2.3",
     "hardhat": "^3.0.6",
-    "solc": "^0.8.30",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "solc": "^0.8.30"
   },
   "type": "module"
 }

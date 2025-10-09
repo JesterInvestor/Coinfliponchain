@@ -171,7 +171,7 @@ export default function CoinFlipOnChain() {
       <div className="w-full space-y-3">
         <button
           onClick={() => window.open(`https://matcha.xyz/tokens/base/${tokenAddress}`,'_blank')}
-          className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-lg sm:text-xl font-bold rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 active:scale-95 min-h-[60px]"
+          className="w-full px-8 py-4 bg-gradient-to-r from-amber-700 to-yellow-800 hover:from-amber-800 hover:to-yellow-900 text-white text-lg sm:text-xl font-bold rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 active:scale-95 min-h-[60px]"
         >
           💎 Buy $FLIP Tokens
         </button>
@@ -179,15 +179,15 @@ export default function CoinFlipOnChain() {
 
       {/* Addresses */}
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div className="text-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">FLIP Token</p>
-          <p className="text-sm sm:text-base font-mono font-semibold text-gray-800 dark:text-white break-all">
+        <div className="text-center bg-neutral-100 dark:bg-neutral-700 rounded-lg p-4">
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">FLIP Token</p>
+          <p className="text-sm sm:text-base font-mono font-semibold text-neutral-800 dark:text-white break-all">
             {tokenAddress}
           </p>
         </div>
-        <div className="text-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">Betting Contract</p>
-          <p className="text-sm sm:text-base font-mono font-semibold text-gray-800 dark:text-white break-all">
+        <div className="text-center bg-neutral-100 dark:bg-neutral-700 rounded-lg p-4">
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">Betting Contract</p>
+          <p className="text-sm sm:text-base font-mono font-semibold text-neutral-800 dark:text-white break-all">
             {bettingContractAddress}
           </p>
         </div>
@@ -196,24 +196,24 @@ export default function CoinFlipOnChain() {
       {/* User Balance and Status */}
       {effectiveIsConnected && (
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className={`text-center rounded-lg p-4 ${canBet ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'}`}>
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">Your $FLIP Balance</p>
-            <p className={`text-xl sm:text-2xl font-bold ${canBet ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+          <div className={`text-center rounded-lg p-4 border-2 ${canBet ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-600' : 'bg-stone-100 dark:bg-stone-900/30 border-stone-600'}`}>
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">Your $FLIP Balance</p>
+            <p className={`text-xl sm:text-2xl font-bold ${canBet ? 'text-amber-700 dark:text-amber-400' : 'text-stone-600 dark:text-stone-400'}`}>
               {flipBalance.toLocaleString()} $FLIP
             </p>
             {!canBet && (
-              <p className="text-xs sm:text-sm text-red-600 dark:text-red-400 mt-1">
+              <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 mt-1">
                 Need {MINIMUM_FLIP_TO_BET.toLocaleString()} $FLIP to bet
               </p>
             )}
           </div>
-          <div className={`text-center rounded-lg p-4 ${isVIP ? 'bg-purple-100 dark:bg-purple-900/30' : 'bg-gray-100 dark:bg-gray-700'}`}>
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">Status</p>
-            <p className={`text-xl sm:text-2xl font-bold ${isVIP ? 'text-purple-600 dark:text-purple-400' : 'text-gray-600 dark:text-gray-400'}`}>
+          <div className={`text-center rounded-lg p-4 border-2 ${isVIP ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-600' : 'bg-neutral-100 dark:bg-neutral-700 border-neutral-600'}`}>
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">Status</p>
+            <p className={`text-xl sm:text-2xl font-bold ${isVIP ? 'text-amber-700 dark:text-amber-400' : 'text-neutral-600 dark:text-neutral-400'}`}>
               {isVIP ? '👑 VIP Member' : '👤 Regular'}
             </p>
             {!isVIP && (
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
                 VIP at {VIP_FLIP_THRESHOLD.toLocaleString()} $FLIP
               </p>
             )}
@@ -222,24 +222,24 @@ export default function CoinFlipOnChain() {
       )}
 
       {!effectiveIsConnected && (
-        <div className="w-full text-center text-base sm:text-lg text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 px-4 py-3 rounded-lg">
+        <div className="w-full text-center text-base sm:text-lg text-amber-800 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 px-4 py-3 rounded-lg border border-amber-300 dark:border-amber-700">
           Connect your wallet to start betting
         </div>
       )}
 
       {/* Heads or Tails Selection */}
       <div className="w-full space-y-3">
-        <h3 className="text-xl sm:text-2xl font-bold text-center text-gray-800 dark:text-white">
+        <h3 className="text-xl sm:text-2xl font-bold text-center text-neutral-800 dark:text-white">
           Choose Your Side
         </h3>
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => setSelectedSide("heads")}
             disabled={isFlipping || !effectiveIsConnected}
-            className={`p-6 sm:p-8 rounded-xl font-bold text-2xl sm:text-3xl transition-all transform ${
+            className={`p-6 sm:p-8 rounded-xl font-bold text-2xl sm:text-3xl transition-all transform border-2 ${
               selectedSide === "heads"
-                ? "bg-blue-600 text-white scale-105 shadow-2xl"
-                : "bg-white dark:bg-gray-800 text-gray-800 dark:text-white hover:scale-105 shadow-lg"
+                ? "bg-amber-700 text-white scale-105 shadow-2xl border-amber-800"
+                : "bg-white dark:bg-neutral-800 text-neutral-800 dark:text-white hover:scale-105 shadow-lg border-neutral-300 dark:border-neutral-600"
             } disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 min-h-[100px] sm:min-h-[120px]`}
           >
             <div className="text-4xl sm:text-5xl mb-2">👑</div>
@@ -248,10 +248,10 @@ export default function CoinFlipOnChain() {
           <button
             onClick={() => setSelectedSide("tails")}
             disabled={isFlipping || !effectiveIsConnected}
-            className={`p-6 sm:p-8 rounded-xl font-bold text-2xl sm:text-3xl transition-all transform ${
+            className={`p-6 sm:p-8 rounded-xl font-bold text-2xl sm:text-3xl transition-all transform border-2 ${
               selectedSide === "tails"
-                ? "bg-purple-600 text-white scale-105 shadow-2xl"
-                : "bg-white dark:bg-gray-800 text-gray-800 dark:text-white hover:scale-105 shadow-lg"
+                ? "bg-stone-700 text-white scale-105 shadow-2xl border-stone-800"
+                : "bg-white dark:bg-neutral-800 text-neutral-800 dark:text-white hover:scale-105 shadow-lg border-neutral-300 dark:border-neutral-600"
             } disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 min-h-[100px] sm:min-h-[120px]`}
           >
             <div className="text-4xl sm:text-5xl mb-2">⚡</div>
@@ -262,7 +262,7 @@ export default function CoinFlipOnChain() {
 
       {/* Quick Bet Amounts */}
       <div className="w-full space-y-3">
-        <h3 className="text-xl sm:text-2xl font-bold text-center text-gray-800 dark:text-white">
+        <h3 className="text-xl sm:text-2xl font-bold text-center text-neutral-800 dark:text-white">
           Select Bet Amount ($FLIP)
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -271,10 +271,10 @@ export default function CoinFlipOnChain() {
               key={amount}
               onClick={() => handleQuickBet(amount)}
               disabled={isFlipping || !effectiveIsConnected}
-              className={`p-4 sm:p-5 rounded-lg font-bold text-lg sm:text-xl transition-all transform ${
+              className={`p-4 sm:p-5 rounded-lg font-bold text-lg sm:text-xl transition-all transform border-2 ${
                 betAmount === amount && !customAmount
-                  ? "bg-green-600 text-white scale-105 shadow-xl"
-                  : "bg-white dark:bg-gray-800 text-gray-800 dark:text-white hover:scale-105 shadow-md"
+                  ? "bg-amber-700 text-white scale-105 shadow-xl border-amber-800"
+                  : "bg-white dark:bg-neutral-800 text-neutral-800 dark:text-white hover:scale-105 shadow-md border-neutral-300 dark:border-neutral-600"
               } disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 min-h-[70px]`}
             >
               {amount.toLocaleString()}
@@ -285,7 +285,7 @@ export default function CoinFlipOnChain() {
 
       {/* Custom Amount Input */}
       <div className="w-full space-y-2">
-        <label className="block text-base sm:text-lg font-semibold text-center text-gray-800 dark:text-white">
+        <label className="block text-base sm:text-lg font-semibold text-center text-neutral-800 dark:text-white">
           Or Enter Custom Amount
         </label>
         <input
@@ -294,7 +294,7 @@ export default function CoinFlipOnChain() {
           onChange={(e) => handleCustomAmount(e.target.value)}
           placeholder="Enter amount in $FLIP"
           disabled={isFlipping || !effectiveIsConnected}
-          className="w-full p-4 text-lg sm:text-xl text-center font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed min-h-[60px]"
+          className="w-full p-4 text-lg sm:text-xl text-center font-semibold rounded-lg border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-white focus:border-amber-600 focus:ring-2 focus:ring-amber-500 disabled:opacity-50 disabled:cursor-not-allowed min-h-[60px]"
           step="0.01"
           min="0.01"
         />
@@ -303,7 +303,7 @@ export default function CoinFlipOnChain() {
       {/* Coin Display */}
       <div className="relative w-40 h-40 sm:w-48 sm:h-48 flex items-center justify-center my-4">
         <div
-          className={`w-full h-full rounded-full bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 shadow-2xl flex items-center justify-center text-5xl sm:text-6xl font-bold text-white transition-all duration-500 ${
+          className={`w-full h-full rounded-full bg-gradient-to-br from-amber-600 via-amber-700 to-yellow-800 shadow-2xl flex items-center justify-center text-5xl sm:text-6xl font-bold text-white transition-all duration-500 border-4 border-amber-900 ${
             isFlipping ? (useEnhancedAnimation ? "animate-flip-3d" : "animate-spin-slow") : ""
           } ${showCelebration ? "animate-glow" : ""}`}
           style={{
@@ -326,7 +326,7 @@ export default function CoinFlipOnChain() {
               return (
                 <div
                   key={i}
-                  className="particle bg-yellow-400"
+                  className="particle bg-amber-600"
                   style={{
                     left: '50%',
                     top: '50%',
@@ -342,7 +342,7 @@ export default function CoinFlipOnChain() {
 
       {/* Animation Settings */}
       <div className="w-full flex items-center justify-center gap-3 py-2">
-        <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+        <label className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300 cursor-pointer">
           <input
             type="checkbox"
             checked={useEnhancedAnimation}
@@ -354,7 +354,7 @@ export default function CoinFlipOnChain() {
       </div>
 
       {/* Result Message */}
-      <p className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white min-h-[3rem] text-center px-4">
+      <p className="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-white min-h-[3rem] text-center px-4">
         {message}
       </p>
 
@@ -362,7 +362,7 @@ export default function CoinFlipOnChain() {
       <button
         onClick={handleFlip}
         disabled={isFlipping || isOnChainFlipping || !effectiveIsConnected || !selectedSide || !canBet}
-        className="w-full px-8 py-5 sm:py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:bg-gray-400 text-white text-xl sm:text-2xl font-bold rounded-xl shadow-2xl transform transition-all duration-200 hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:hover:scale-100 min-h-[70px]"
+        className="w-full px-8 py-5 sm:py-6 bg-gradient-to-r from-amber-700 to-yellow-800 hover:from-amber-800 hover:to-yellow-900 disabled:bg-neutral-400 text-white text-xl sm:text-2xl font-bold rounded-xl shadow-2xl transform transition-all duration-200 hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:hover:scale-100 min-h-[70px]"
       >
         {isFlipping || isOnChainFlipping 
           ? "🎲 Flipping..." 
@@ -373,20 +373,20 @@ export default function CoinFlipOnChain() {
 
       {/* Stats */}
       <div className="w-full grid grid-cols-3 gap-4 mt-6">
-        <div className="bg-white dark:bg-gray-800 p-4 sm:p-5 rounded-xl shadow-lg text-center">
-          <div className="text-3xl sm:text-4xl font-bold text-blue-600">👑</div>
-          <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-2">Heads</div>
-          <div className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mt-1">{stats.heads}</div>
+        <div className="bg-white dark:bg-neutral-800 p-4 sm:p-5 rounded-xl shadow-lg text-center border border-neutral-200 dark:border-neutral-700">
+          <div className="text-3xl sm:text-4xl font-bold text-amber-700">👑</div>
+          <div className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 mt-2">Heads</div>
+          <div className="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-white mt-1">{stats.heads}</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 sm:p-5 rounded-xl shadow-lg text-center">
-          <div className="text-3xl sm:text-4xl font-bold text-purple-600">⚡</div>
-          <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-2">Tails</div>
-          <div className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mt-1">{stats.tails}</div>
+        <div className="bg-white dark:bg-neutral-800 p-4 sm:p-5 rounded-xl shadow-lg text-center border border-neutral-200 dark:border-neutral-700">
+          <div className="text-3xl sm:text-4xl font-bold text-stone-700">⚡</div>
+          <div className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 mt-2">Tails</div>
+          <div className="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-white mt-1">{stats.tails}</div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 sm:p-5 rounded-xl shadow-lg text-center">
-          <div className="text-3xl sm:text-4xl font-bold text-green-600">∑</div>
-          <div className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-2">Total</div>
-          <div className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mt-1">{stats.total}</div>
+        <div className="bg-white dark:bg-neutral-800 p-4 sm:p-5 rounded-xl shadow-lg text-center border border-neutral-200 dark:border-neutral-700">
+          <div className="text-3xl sm:text-4xl font-bold text-neutral-700">∑</div>
+          <div className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 mt-2">Total</div>
+          <div className="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-white mt-1">{stats.total}</div>
         </div>
       </div>
     </div>

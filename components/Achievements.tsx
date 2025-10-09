@@ -92,7 +92,7 @@ export default function Achievements({ totalBets, totalWins, totalVolume, curren
   return (
     <div className="w-full space-y-4">
       {/* Achievement Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-4 text-white">
+      <div className="bg-gradient-to-r from-amber-700 to-yellow-800 rounded-xl p-4 text-white border border-amber-900">
         <h2 className="text-2xl font-bold mb-2">🏆 Achievements</h2>
         <p className="text-sm opacity-90">
           Unlocked: {unlockedCount} / {totalCount}
@@ -112,22 +112,22 @@ export default function Achievements({ totalBets, totalWins, totalVolume, curren
             key={achievement.id}
             className={`relative p-4 rounded-lg border-2 transition-all ${
               achievement.unlocked
-                ? "bg-gradient-to-br from-yellow-100 to-yellow-200 dark:from-yellow-900/40 dark:to-yellow-800/40 border-yellow-400"
-                : "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 opacity-60"
+                ? "bg-gradient-to-br from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/40 border-amber-600"
+                : "bg-neutral-100 dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 opacity-60"
             }`}
           >
             <div className="text-3xl mb-2 text-center">{achievement.icon}</div>
             <h3 className={`text-sm font-bold text-center mb-1 ${
-              achievement.unlocked ? "text-yellow-800 dark:text-yellow-200" : "text-gray-600 dark:text-gray-400"
+              achievement.unlocked ? "text-amber-800 dark:text-amber-200" : "text-neutral-600 dark:text-neutral-400"
             }`}>
               {achievement.title}
             </h3>
-            <p className="text-xs text-center text-gray-600 dark:text-gray-400">
+            <p className="text-xs text-center text-neutral-600 dark:text-neutral-400">
               {achievement.description}
             </p>
             {achievement.unlocked && (
               <div className="absolute top-2 right-2">
-                <span className="text-green-500 text-lg">✓</span>
+                <span className="text-amber-700 text-lg">✓</span>
               </div>
             )}
           </div>
@@ -137,7 +137,7 @@ export default function Achievements({ totalBets, totalWins, totalVolume, curren
       {/* New Achievement Modal */}
       {showModal && newlyUnlockedAchievement && (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-          <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl p-6 shadow-2xl animate-bounce pointer-events-auto max-w-sm mx-4">
+          <div className="bg-gradient-to-r from-amber-600 to-yellow-700 rounded-2xl p-6 shadow-2xl animate-bounce pointer-events-auto max-w-sm mx-4 border-4 border-amber-900">
             <div className="text-center">
               <div className="text-6xl mb-4">{newlyUnlockedAchievement.icon}</div>
               <h3 className="text-2xl font-bold text-white mb-2">Achievement Unlocked!</h3>
