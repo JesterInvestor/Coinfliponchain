@@ -316,6 +316,9 @@ npm run build
 vercel deploy
 ```
 
+Note on dependencies:
+- This project uses ethers v6 and the modern `thirdweb` SDK package (v5+). We do not use `@thirdweb-dev/sdk` or `@thirdweb-dev/react` here to avoid peer dependency conflicts that require ethers v5. If you add those packages later, pin compatible versions or consider using `--legacy-peer-deps` on your own risk.
+
 ### Environment Variables
 Make sure to set these in your deployment platform:
 - `NEXT_PUBLIC_THIRDWEB_CLIENT_ID` - Your Thirdweb client ID
