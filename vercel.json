@@ -1,6 +1,6 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "installCommand": "rm -f package-lock.json && npm install --omit=dev --no-audit --no-fund --legacy-peer-deps",
-  "buildCommand": "npm run build"
+  "installCommand": "pnpm install --frozen-lockfile --prod --no-optional",
+  "buildCommand": "pnpm run build"
 }
