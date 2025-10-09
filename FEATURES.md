@@ -155,15 +155,6 @@ A two-way system that allows users to support content creators through tipping, 
 
 ### Creator Tipping System
 
-#### Featured Creators
-The app showcases featured creators with:
-- Avatar/emoji representation
-- Display name
-- Wallet address (truncated)
-- Total support received (in $FLIP)
-- Number of supporters
-- Click to select for tipping
-
 #### Tipping Features
 - **Quick Tip Amounts**: 1,000 / 5,000 / 10,000 / 50,000 $FLIP
 - **Custom Amounts**: Input any amount above minimum
@@ -171,9 +162,9 @@ The app showcases featured creators with:
 - **No Platform Fee**: 100% goes to creator (can be modified)
 - **Transaction Confirmation**: Clear success/error feedback
 
-#### Custom Creator Support
-Users can tip any address by:
-1. Entering custom creator wallet address (0x...)
+#### How to Tip
+Users can tip any creator by:
+1. Entering creator wallet address (0x...)
 2. Selecting tip amount
 3. Confirming transaction
 4. Supports any valid Ethereum address
@@ -213,7 +204,7 @@ Featured information displays:
 ### User Experience
 
 #### Tipping Flow
-1. Browse featured creators or enter custom address
+1. Enter creator wallet address
 2. Select from quick amounts or enter custom
 3. Click "Tip X $FLIP" button
 4. Confirm transaction in wallet
@@ -389,19 +380,8 @@ Edit `components/CreatorSupport.tsx`:
 uint256 commission = _amount * 10 / 100; // 10% commission
 ```
 
-### Customizing Featured Creators
-Edit `components/CreatorSupport.tsx`:
-```typescript
-const featuredCreators: Creator[] = [
-  {
-    address: "0x...",
-    name: "Your Creator",
-    avatar: "🎨",
-    totalSupport: 0,
-    supporters: 0
-  }
-];
-```
+### Customizing Creator Support
+The creator support system allows users to tip any creator by entering their wallet address directly. No need to pre-configure featured creators.
 
 ---
 

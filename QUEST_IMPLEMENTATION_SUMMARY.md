@@ -21,14 +21,14 @@ All requirements for the on-chain swapping quest feature have been successfully 
 
 ### 3. $FLIP Token Pairs Only ✅
 - Quest exclusively uses $FLIP token
-- Minimum 1,000 $FLIP per swap
+- Minimum 10,000 $FLIP per swap
 - Balance validation before transactions
 - Address format validation
 
 ### 4. Clear User Interface ✅
 - Visual progress bar showing completion percentage
 - Step indicators with active/completed/pending states
-- Quick swap buttons (1K, 5K, 10K $FLIP)
+- Quick swap buttons (10K, 100K, 1M $FLIP)
 - Custom amount input field
 - Optional recipient address field
 - Real-time balance display
@@ -42,9 +42,9 @@ All requirements for the on-chain swapping quest feature have been successfully 
 
 ### 6. Achievement System ✅
 - 3 new quest achievements added
-- Quest Beginner (1,000 $FLIP)
-- Quest Apprentice (5,000 $FLIP)
-- Quest Master (10,000 $FLIP)
+- Quest Beginner (10,000 $FLIP)
+- Quest Apprentice (100,000 $FLIP)
+- Quest Master (1,000,000 $FLIP)
 - Total achievements increased to 15
 - Real-time sync between Quest and Achievements tabs
 
@@ -132,7 +132,7 @@ Achievement Check → UI Update → Success Modal
 ## 🔒 Security Features
 
 ### Validation
-- Minimum swap amount: 1,000 $FLIP
+- Minimum swap amount: 10,000 $FLIP
 - Balance check before transaction
 - Address format validation (0x + 40 hex chars)
 - Transaction confirmation required
@@ -149,10 +149,10 @@ Achievement Check → UI Update → Success Modal
 
 ### Step Structure
 1. **Connect Wallet** - Web3 wallet connection
-2. **Check Balance** - Verify 1,000+ $FLIP
-3. **First Swap** - Complete 1,000 $FLIP swap
-4. **Advanced Swap** - Complete 5,000 $FLIP swap
-5. **Quest Master** - Complete 10,000 $FLIP swap
+2. **Check Balance** - Verify 10,000+ $FLIP
+3. **First Swap** - Complete 10,000 $FLIP swap
+4. **Advanced Swap** - Complete 100,000 $FLIP swap
+5. **Quest Master** - Complete 1,000,000 $FLIP swap
 
 ### Progress Tracking
 - Visual progress bar (0-100%)
@@ -221,7 +221,7 @@ Achievement Check → UI Update → Success Modal
 ```
 1. Navigate to Quest tab
 2. Connect wallet
-3. Ensure 1,000+ $FLIP balance
+3. Ensure 10,000+ $FLIP balance
 4. Select quick amount or enter custom
 5. Click "Swap" button
 6. Confirm transaction in wallet
@@ -248,15 +248,15 @@ const total = history.reduce((sum, tx) => sum + tx.amount, 0);
 
 ### Quest Achievements
 - **Quest Beginner** 🔄
-  - Requirement: 1,000 $FLIP swapped
+  - Requirement: 10,000 $FLIP swapped
   - First quest completion milestone
   
 - **Quest Apprentice** ⚡
-  - Requirement: 5,000 $FLIP swapped
+  - Requirement: 100,000 $FLIP swapped
   - Intermediate quest progress
   
 - **Quest Master** 👑
-  - Requirement: 10,000 $FLIP swapped
+  - Requirement: 1,000,000 $FLIP swapped
   - Ultimate quest achievement
 
 ### Unlock Mechanism
