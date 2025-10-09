@@ -4,18 +4,43 @@ A modern, on-chain coin flipping application built with Next.js, Thirdweb SDK, a
 
 ## 🚀 Features
 
+### Core Betting Features
 - ⚡ **Next.js 15** with App Router and TypeScript
 - 🔗 **Thirdweb Integration** for seamless wallet connection and smart contract interactions
 - 🌐 **Base Network** support for fast and low-cost transactions
-- 🎨 **Modern UI/UX** with Tailwind CSS and smooth animations
-- 📱 **Fully Responsive** design for all devices
-- 🎮 **Interactive Gameplay** with real-time statistics
-- 🖼️ **Farcaster Frames** ready with OG image generation
-- 🔐 **Web3 Wallet Support** (MetaMask, WalletConnect, Coinbase Wallet, etc.)
 - 💰 **ERC20 Token Betting** with $FLIP tokens
 - 🏦 **Platform Fees** using Thirdweb's PlatformFee extension
 - 🔒 **Smart Contract Security** with access control and treasury management
 - 📊 **Real-time Balance Tracking** from blockchain
+- 🔐 **Web3 Wallet Support** (MetaMask, WalletConnect, Coinbase Wallet, etc.)
+
+### Enhanced User Experience
+- 🎨 **Enhanced 3D Coin Animations** with particle effects and dynamic visual feedback
+- ✨ **Customizable Animation Modes** - Toggle between standard and enhanced 3D flip animations
+- 💫 **Celebration Effects** with glow animations and visual rewards
+- 📱 **Fully Responsive** design optimized for mobile and desktop
+- 🎮 **Interactive Gameplay** with intuitive bet selection and real-time feedback
+
+### Gamification & Collectibles
+- 🏆 **Achievement System** with 12+ unlockable badges and milestones
+- 🎖️ **Achievement Categories** including:
+  - Betting Milestones (First Flip, Bronze/Silver/Gold/Diamond Bettor)
+  - Win Achievements (Lucky Beginner, Triple Win, Hot Streak, Unstoppable)
+  - Volume Achievements (Small/Big/Mega Whale)
+- 📊 **Progress Tracking** with visual progress bars and unlock notifications
+- 🎁 **Achievement Notifications** with animated popups on unlock
+
+### Creator Support & Community
+- 💝 **Creator Tipping System** - Support your favorite creators directly with $FLIP
+- 🎯 **Featured Creators** showcase with supporter counts and total support
+- 🔗 **Referral System** - Become a creator and earn 5% of referred user bets
+- 📋 **Easy Sharing** with one-click referral link copying
+- 👥 **Community Building** tools for content creators and influencers
+
+### Additional Features
+- 🖼️ **Farcaster Frames** ready with OG image generation
+- 👑 **VIP Status** for high-value token holders
+- 📈 **Comprehensive Statistics** tracking wins, losses, and total volume
 
 ## 🛠️ Tech Stack
 
@@ -58,12 +83,59 @@ npm run dev
 
 ## 🎮 How to Use
 
-1. **Get $FLIP Tokens**: Buy $FLIP tokens from the exchange or receive from admin
-2. **Connect Wallet**: Click the "Connect Wallet" button in the top-right corner
-3. **Select Your Bet**: Choose Heads or Tails and your bet amount
-4. **Place Bet**: Approve token spending and place your bet
-5. **Win or Lose**: Results are determined on-chain with automatic payouts
-6. **View Stats**: Track your betting history and statistics on-chain
+### Getting Started
+1. **Get $FLIP Tokens**: 
+   - Click the "Buy $FLIP Tokens" button in the app
+   - Visit Matcha.xyz to swap for $FLIP on Base network
+   - Contract: `0x9d8eCa05F0FD5486916471c2145e32cdBF5112dF`
+
+2. **Connect Wallet**: 
+   - Click the "Connect Wallet" button in the header
+   - Choose your preferred wallet (MetaMask, Coinbase Wallet, WalletConnect, etc.)
+   - Approve the connection to Base network
+
+### Playing the Game
+3. **Choose Your Side**: 
+   - Select either Heads (👑) or Tails (⚡)
+   - Your selection will be highlighted
+
+4. **Select Bet Amount**: 
+   - Choose from quick bet amounts (1,000 / 10,000 / 100,000 / 1,000,000 $FLIP)
+   - Or enter a custom amount
+   - Minimum bet: 1,000 $FLIP
+
+5. **Customize Experience**:
+   - Toggle "Enhanced 3D Animation" for immersive coin flip effects
+   - View your balance and VIP status
+
+6. **Place Your Bet**: 
+   - Click the "Bet" button
+   - Approve token spending (first time only)
+   - Wait for transaction confirmation
+   - Results are determined on-chain with automatic payouts
+
+7. **Track Progress**: 
+   - View real-time statistics (Heads/Tails/Total)
+   - Check your balance updates automatically
+   - Monitor platform fee (default 1%)
+
+### Exploring Additional Features
+8. **Unlock Achievements** (🏆 Achievements Tab):
+   - Complete betting milestones to unlock badges
+   - Track your progress across different categories
+   - Get notified when you unlock new achievements
+
+9. **Support Creators** (💝 Creators Tab):
+   - Browse featured creators
+   - Tip creators directly with $FLIP tokens
+   - Generate your own referral link
+   - Earn 5% commission on referred user bets
+
+### Tips for Success
+- Start with smaller bets to familiarize yourself with the platform
+- VIP status unlocks at 1,000,000 $FLIP balance
+- Achievement system rewards consistent play
+- Use referral links to earn passive income
 
 ## 🏗️ Project Structure
 
@@ -71,17 +143,28 @@ npm run dev
 Coinfliponchain/
 ├── app/
 │   ├── api/
-│   │   ├── flip/         # Flip API for Farcaster Frames
-│   │   └── og/           # OG image generation
-│   ├── layout.tsx        # Root layout with providers
-│   ├── page.tsx          # Main page
-│   ├── providers.tsx     # Thirdweb provider wrapper
-│   └── globals.css       # Global styles
+│   │   ├── flip/                # Flip API for Farcaster Frames
+│   │   └── og/                  # OG image generation
+│   ├── layout.tsx               # Root layout with providers
+│   ├── page.tsx                 # Main page with tab navigation
+│   ├── providers.tsx            # Thirdweb provider wrapper
+│   └── globals.css              # Global styles & animations
 ├── components/
-│   ├── CoinFlip.tsx      # Main coin flip game component
-│   └── WalletConnect.tsx # Wallet connection component
-├── public/               # Static assets
-└── .env.local           # Environment variables
+│   ├── CoinFlip.tsx             # Basic coin flip demo component
+│   ├── CoinFlipOnChain.tsx      # Main on-chain betting component
+│   ├── WalletConnect.tsx        # Wallet connection component
+│   ├── Achievements.tsx         # Achievement/collectibles system
+│   └── CreatorSupport.tsx       # Creator tipping & referrals
+├── hooks/
+│   └── useCoinFlip.ts           # Custom hook for contract interactions
+├── contracts/
+│   ├── CoinFlipBetting.sol      # Main betting smart contract
+│   ├── FlipToken.sol            # ERC20 token contract
+│   └── README.md                # Contract documentation
+├── public/                      # Static assets
+├── examples/                    # Code examples
+├── .env.local                   # Environment variables
+└── Documentation files          # Various .md files
 ```
 
 ## 🔧 Configuration
@@ -102,17 +185,97 @@ The app uses Thirdweb SDK for:
 - User onboarding
 - Transaction management
 
+## 📖 Feature Deep Dive
+
+### Enhanced Coin Flip Animation
+The app features multiple animation modes for an engaging user experience:
+
+**Standard Animation**:
+- Smooth 360° coin rotation
+- Clean and performant
+- Works on all devices
+
+**Enhanced 3D Animation**:
+- Full 3D perspective with rotateY and rotateX transformations
+- Dynamic scaling during flip
+- Particle burst effects on flip
+- Glow effects for wins
+- Toggle-able via checkbox in the UI
+
+**Technical Details**:
+- CSS keyframe animations defined in `app/globals.css`
+- Animations: `flip-3d`, `particle-burst`, `glow-pulse`, `confetti-fall`
+- React state management for animation control
+- Performance-optimized with CSS transforms
+
+### Achievement System
+A comprehensive gamification system to keep users engaged:
+
+**Achievement Categories**:
+1. **Betting Milestones**: First Flip → Bronze → Silver → Gold → Diamond (1 to 500 bets)
+2. **Win Achievements**: Lucky Beginner, Triple Win, Hot Streak, Unstoppable
+3. **Volume Achievements**: Small/Big/Mega Whale (10K to 1M $FLIP wagered)
+
+**Features**:
+- Real-time progress tracking
+- Visual progress bar showing completion percentage
+- Animated unlock notifications with confetti effects
+- Persistent state tracking (can be extended to on-chain or backend)
+- Badge display with icons and descriptions
+
+**Implementation**:
+- Component: `components/Achievements.tsx`
+- Automatic unlock detection based on user statistics
+- Modal popups for new achievements
+- Grid layout responsive to all screen sizes
+
+### Creator Support & Referral System
+Build and support your community:
+
+**Tipping System**:
+- Tip featured creators or any address
+- Quick tip amounts: 1K, 5K, 10K, 50K $FLIP
+- Custom tip amounts supported
+- Transaction integration ready
+
+**Referral Program**:
+- Generate unique referral codes based on wallet address
+- One-click link copying for easy sharing
+- Earn 5% commission on referred user bets (implementation ready)
+- Track supporters and total support received
+
+**Featured Creators**:
+- Showcase top creators with stats
+- Display total support and supporter count
+- Avatar/icon representation
+- Click to select for tipping
+
+**How to Become a Creator**:
+1. Connect your wallet
+2. Navigate to Creators tab
+3. Click "Show My Referral Code"
+4. Copy and share your referral link
+5. Earn rewards automatically
+
 ## 🎨 Customization
 
 ### Styling
-- Modify `app/globals.css` for global styles
+- Modify `app/globals.css` for global styles and custom animations
 - Update Tailwind classes in components for UI changes
 - Customize color schemes in component files
+- Add new animations by defining CSS keyframes
 
 ### Game Logic
-- Edit `components/CoinFlip.tsx` to modify game behavior
-- Add smart contract integration for on-chain gameplay
-- Implement betting or wagering features
+- Edit `components/CoinFlipOnChain.tsx` for betting behavior
+- Modify `hooks/useCoinFlip.ts` for contract interaction logic
+- Extend achievement criteria in `components/Achievements.tsx`
+- Add new creator features in `components/CreatorSupport.tsx`
+
+### Smart Contracts
+- Review `contracts/CoinFlipBetting.sol` for betting logic
+- Modify platform fee structure
+- Add new game modes or betting options
+- Extend with creator reward distribution logic
 
 ## 🚀 Deployment
 
@@ -145,9 +308,27 @@ This project is open source and available under the MIT License.
 - [Base Network](https://base.org/)
 - [Next.js Documentation](https://nextjs.org/docs)
 
+## 📚 Additional Documentation
+
+- **[FEATURES.md](./FEATURES.md)** - Detailed documentation of all new features including animations, achievements, and creator support
+- **[USER_GUIDE.md](./USER_GUIDE.md)** - Comprehensive user guide with step-by-step instructions, tips, and troubleshooting
+- **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Instructions for deploying the application
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Technical architecture and design decisions
+- **[contracts/README.md](./contracts/README.md)** - Smart contract documentation
+
 ## 📞 Support
 
-For questions or support, please open an issue on GitHub.
+For questions or support:
+- Check [USER_GUIDE.md](./USER_GUIDE.md) for common questions and troubleshooting
+- Review [FEATURES.md](./FEATURES.md) for feature-specific documentation
+- Open an issue on GitHub for bugs or feature requests
+
+## 🤝 For Developers
+
+Want to contribute or customize?
+- See [FEATURES.md](./FEATURES.md) for customization guides
+- Check [ARCHITECTURE.md](./ARCHITECTURE.md) for technical details
+- Review [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines
 
 ---
 

@@ -1,7 +1,19 @@
+"use client";
+
+import { useState } from "react";
 import CoinFlipOnChain from "@/components/CoinFlipOnChain";
 import WalletConnect from "@/components/WalletConnect";
+import Achievements from "@/components/Achievements";
+import CreatorSupport from "@/components/CreatorSupport";
+
+type TabType = "game" | "achievements" | "creators";
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<TabType>("game");
+  const [totalBets, setTotalBets] = useState(0);
+  const [totalWins, setTotalWins] = useState(0);
+  const [totalVolume, setTotalVolume] = useState(0);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
       {/* Header - Centered */}
@@ -22,10 +34,54 @@ export default function Home() {
 
       {/* Main Content - Centered */}
       <main className="flex-1 w-full px-4 py-6">
-        <div className="max-w-2xl mx-auto">
-          {/* Coin Flip Betting Game */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 sm:p-8">
-            <CoinFlipOnChain />
+        <div className="max-w-4xl mx-auto">
+          {/* Tab Navigation */}
+          <div className="bg-white dark:bg-gray-800 rounded-t-2xl shadow-lg p-2 flex gap-2">
+            <button
+              onClick={() => setActiveTab("game")}
+              className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === "game"
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+            >
+              🎲 Play
+            </button>
+            <button
+              onClick={() => setActiveTab("achievements")}
+              className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === "achievements"
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+            >
+              🏆 Achievements
+            </button>
+            <button
+              onClick={() => setActiveTab("creators")}
+              className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === "creators"
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+            >
+              💝 Creators
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className="bg-white dark:bg-gray-800 rounded-b-2xl shadow-2xl p-4 sm:p-8">
+            {activeTab === "game" && <CoinFlipOnChain />}
+            {activeTab === "achievements" && (
+              <Achievements
+                totalBets={totalBets}
+                totalWins={totalWins}
+                totalVolume={totalVolume}
+              />
+            )}
+            {activeTab === "creators" && (
+              <CreatorSupport />
+            )}
           </div>
 
           {/* Features - Centered */}
