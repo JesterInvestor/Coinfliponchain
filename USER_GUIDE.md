@@ -194,34 +194,15 @@ Creator Support allows you to:
 
 ### Tipping Creators
 
-#### Featured Creators
-The app showcases top creators:
-```
-┌─────────────────────────┐
-│ 👑 CryptoKing          │
-│ 0x742d35...             │
-│ 50,000 $FLIP           │ ← Total support received
-│ 42 supporters          │ ← Number of supporters
-└─────────────────────────┘
-```
-- Click to select a creator
-- Selected creator is highlighted
-
 #### How to Tip
-1. **Select creator** (featured or custom address)
-2. **Choose tip amount:**
+1. **Enter creator address** in the "Enter Creator Address" field
+2. **Format:** `0x1234567890abcdef...`
+3. **Choose tip amount:**
    - Quick: 1,000 / 5,000 / 10,000 / 50,000 $FLIP
    - Custom: Enter any amount
-3. **Click** "💝 Tip X $FLIP" button
-4. **Confirm** transaction in wallet
-5. **Done!** Creator receives 100% of tip
-
-#### Tipping Custom Addresses
-Want to tip someone not featured?
-1. Enter their wallet address in "Enter Creator Address" field
-2. Format: `0x1234567890abcdef...`
-3. Select tip amount
-4. Send tip
+4. **Click** "💝 Tip X $FLIP" button
+5. **Confirm** transaction in wallet
+6. **Done!** Creator receives 100% of tip
 
 ### Becoming a Creator (Referral System)
 
@@ -280,12 +261,10 @@ You earn: 500 $FLIP (5% commission)
 - Lifetime commissions (not just first bet)
 
 #### Tracking Your Success
-Featured creators display shows:
-- Total support received
+Track your success through:
+- Total support received from tips
 - Number of supporters
-- Your ranking among creators
-
-**Goal:** Get featured as a top creator!
+- Referral earnings (when implemented)
 
 ---
 
