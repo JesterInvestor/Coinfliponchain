@@ -15,19 +15,19 @@ The quest consists of 5 progressive steps:
    - Supports MetaMask, Coinbase Wallet, WalletConnect, and more
 
 2. **Check $FLIP Balance** (💰)
-   - Ensure you have at least 1,000 $FLIP tokens
+   - Ensure you have at least 10,000 $FLIP tokens
    - Displays your current balance in real-time
 
 3. **Perform First Swap** (🔄)
-   - Swap 1,000 $FLIP to complete this quest step
+   - Swap 10,000 $FLIP to complete this quest step
    - Learn the basics of on-chain token swaps
 
 4. **Complete Advanced Swap** (⚡)
-   - Swap 5,000 $FLIP for advanced completion
+   - Swap 100,000 $FLIP for advanced completion
    - Master larger transaction handling
 
 5. **Quest Master** (👑)
-   - Swap 10,000 $FLIP to become a Quest Master
+   - Swap 1,000,000 $FLIP to become a Quest Master
    - Unlock the final achievement
 
 ### 🔐 On-Chain Execution
@@ -50,9 +50,9 @@ The quest consists of 5 progressive steps:
 ### 🎉 Achievements Integration
 
 The quest unlocks special achievements:
-- **Quest Beginner** - Complete first swap (1,000 $FLIP)
-- **Quest Apprentice** - Swap 5,000 $FLIP in quests
-- **Quest Master** - Swap 10,000 $FLIP in quests
+- **Quest Beginner** - Complete first swap (10,000 $FLIP)
+- **Quest Apprentice** - Swap 100,000 $FLIP in quests
+- **Quest Master** - Swap 1,000,000 $FLIP in quests
 
 Achievements appear in the main Achievements tab and trigger celebration modals.
 
@@ -68,7 +68,7 @@ Achievements appear in the main Achievements tab and trigger celebration modals.
 
 ### 💡 User Interface
 
-- **Quick swap buttons** for common amounts (1,000 / 5,000 / 10,000 $FLIP)
+- **Quick swap buttons** for common amounts (10,000 / 100,000 / 1,000,000 $FLIP)
 - **Custom amount input** for flexible swap sizes
 - **Optional recipient address** (defaults to quest address if not specified)
 - **Real-time balance display** with visual indicators
@@ -87,7 +87,7 @@ Achievements appear in the main Achievements tab and trigger celebration modals.
 
 ### Security Features
 
-- Minimum swap amount: 1,000 $FLIP
+- Minimum swap amount: 10,000 $FLIP
 - Balance validation before transaction
 - Address format validation for recipients
 - Transaction confirmation before execution
@@ -178,7 +178,7 @@ const DEFAULT_QUEST_ADDRESS = "0xYourAddressHere";
 ### Quick Swap Amounts
 Modify the quick swap buttons:
 ```typescript
-const quickSwapAmounts = [1000, 5000, 10000]; // amounts in $FLIP
+const quickSwapAmounts = [10000, 100000, 1000000]; // amounts in $FLIP
 ```
 
 ### Quest Steps
@@ -201,7 +201,7 @@ const [questSteps, setQuestSteps] = useState<QuestStep[]>([
 
 ### For Users
 
-1. **Start Small**: Begin with the minimum amount (1,000 $FLIP)
+1. **Start Small**: Begin with the minimum amount (10,000 $FLIP)
 2. **Verify Addresses**: Double-check recipient addresses before swapping
 3. **Check Gas Fees**: Ensure you have enough ETH for transaction fees
 4. **Keep History**: Your swap history is stored locally - don't clear browser data
