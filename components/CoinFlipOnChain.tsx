@@ -6,6 +6,8 @@ import { useCoinFlip } from "@/hooks/useCoinFlip";
 type CoinSide = "heads" | "tails";
 
 export default function CoinFlipOnChain() {
+  const tokenAddress = process.env.NEXT_PUBLIC_FLIP_TOKEN_ADDRESS || "0x0000000000000000000000000000000000000000";
+  const bettingContractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x0000000000000000000000000000000000000000";
   const [isFlipping, setIsFlipping] = useState(false);
   const [result, setResult] = useState<CoinSide | null>(null);
   const [message, setMessage] = useState("Select Heads or Tails to start!");
@@ -168,19 +170,27 @@ export default function CoinFlipOnChain() {
       {/* Step 1: Buy Native Token Button */}
       <div className="w-full space-y-3">
         <button
-          onClick={() => window.open(`https://matcha.xyz/tokens/base/0x9d8eCa05F0FD5486916471c2145e32cdBF5112dF`, '_blank')}
+          onClick={() => window.open(`https://matcha.xyz/tokens/base/${tokenAddress}`,'_blank')}
           className="w-full px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-lg sm:text-xl font-bold rounded-xl shadow-xl transform transition-all duration-200 hover:scale-105 active:scale-95 min-h-[60px]"
         >
           💎 Buy $FLIP Tokens
         </button>
       </div>
 
-      {/* Contract Address */}
-      <div className="w-full text-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
-        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">Contract Address</p>
-        <p className="text-sm sm:text-base font-mono font-semibold text-gray-800 dark:text-white break-all">
-          0x9d8eCa05F0FD5486916471c2145e32cdBF5112dF
-        </p>
+      {/* Addresses */}
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="text-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">FLIP Token</p>
+          <p className="text-sm sm:text-base font-mono font-semibold text-gray-800 dark:text-white break-all">
+            {tokenAddress}
+          </p>
+        </div>
+        <div className="text-center bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1">Betting Contract</p>
+          <p className="text-sm sm:text-base font-mono font-semibold text-gray-800 dark:text-white break-all">
+            {bettingContractAddress}
+          </p>
+        </div>
       </div>
 
       {/* User Balance and Status */}

@@ -323,7 +323,7 @@ Make sure to set these in your deployment platform:
 - `NEXT_PUBLIC_CONTRACT_ADDRESS` - CoinFlipBetting contract address
 - `NEXT_PUBLIC_FLIP_TOKEN_ADDRESS` - FLIP token (ERC20) contract address
 
-See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for detailed deployment instructions.
+See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for detailed deployment instructions. For Base Sepolia testnet setup and deployment, see [SepoliaTest.md](./SepoliaTest.md).
 
 ## 🤝 Contributing
 
@@ -346,6 +346,7 @@ This project is open source and available under the MIT License.
 - **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Instructions for deploying the application
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Technical architecture and design decisions
 - **[contracts/README.md](./contracts/README.md)** - Smart contract documentation
+- **[SepoliaTest.md](./SepoliaTest.md)** - Base Sepolia (testnet) deployment and frontend wiring guide
 
 ## 📞 Support
 

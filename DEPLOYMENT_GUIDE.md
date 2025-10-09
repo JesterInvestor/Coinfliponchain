@@ -75,6 +75,8 @@ Example with 1% (100 bps) fee and 1000 FLIP bet:
 
 Copy the deployed contract address for updating frontend environment variables.
 
+> Tip: For Base Sepolia (testnet) specific steps and environment setup, see [SepoliaTest.md](./SepoliaTest.md).
+
 ## Step 3: Configure Frontend
 
 ### Update Environment Variables
