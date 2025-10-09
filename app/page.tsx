@@ -5,8 +5,9 @@ import CoinFlipOnChain from "@/components/CoinFlipOnChain";
 import WalletConnect from "@/components/WalletConnect";
 import Achievements from "@/components/Achievements";
 import CreatorSupport from "@/components/CreatorSupport";
+import SwappingQuest from "@/components/SwappingQuest";
 
-type TabType = "game" | "achievements" | "creators";
+type TabType = "game" | "achievements" | "creators" | "quest";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>("game");
@@ -48,6 +49,16 @@ export default function Home() {
               🎲 Play
             </button>
             <button
+              onClick={() => setActiveTab("quest")}
+              className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                activeTab === "quest"
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+            >
+              🔄 Quest
+            </button>
+            <button
               onClick={() => setActiveTab("achievements")}
               className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
                 activeTab === "achievements"
@@ -72,6 +83,7 @@ export default function Home() {
           {/* Tab Content */}
           <div className="bg-white dark:bg-gray-800 rounded-b-2xl shadow-2xl p-4 sm:p-8">
             {activeTab === "game" && <CoinFlipOnChain />}
+            {activeTab === "quest" && <SwappingQuest />}
             {activeTab === "achievements" && (
               <Achievements
                 totalBets={totalBets}
