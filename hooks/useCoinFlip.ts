@@ -40,6 +40,14 @@ export function useCoinFlip() {
     address: tokenAddress,
   });
 
+  const isConfigInvalid = () => {
+    const ca = (contractAddress || "").toLowerCase();
+    const ta = (tokenAddress || "").toLowerCase();
+    if (!ca || !ta) return true;
+    if (ca === ta) return true;
+    return false;
+  };
+
   // Helpers to read contract state
   const readMinBetAmount = async (): Promise<bigint> => {
     try {
@@ -65,6 +73,19 @@ export function useCoinFlip() {
       return Boolean(v);
     } catch {
       return false;
+    }
+  };
+
+  const readAllowance = async (owner: string, spender: string): Promise<bigint> => {
+    try {
+      const v = await readContract({
+        contract: tokenContract,
+        method: "function allowance(address owner, address spender) view returns (uint256)",
+        params: [owner, spender],
+      });
+      return v as bigint;
+    } catch {
+      return BigInt(0);
     }
   };
 
@@ -259,6 +280,10 @@ export function useCoinFlip() {
     }
 
     try {
+      if (isConfigInvalid()) {
+        setError("Config error: Betting contract address equals or is missing vs FLIP token address. Check env NEXT_PUBLIC_CONTRACT_ADDRESS.");
+        return null;
+      }
       // throttle if recent user-rejected approval
       const key = `approvalRejectAt:${account.address}`;
       const last = Number(typeof window !== "undefined" ? window.localStorage.getItem(key) : "0") || 0;
@@ -399,14 +424,35 @@ export function useCoinFlip() {
       const amountInWei = BigInt(Math.floor(amount * 10**18));
 
       // Preflight checks to surface clearer errors
+      if (isConfigInvalid()) {
+        setError("Config error: Betting contract address equals or is missing vs FLIP token address. Check env NEXT_PUBLIC_CONTRACT_ADDRESS.");
+        return null;
+      }
       const preErr = await preflightBet(amountInWei);
       if (preErr) {
         setError(preErr);
         return null;
       }
 
-      // First approve tokens
-      await approveTokens(amount);
+      // Ensure allowance; request approval if needed and ensure it succeeds
+      try {
+        const currentAllowance = await readAllowance(account.address, contractAddress);
+        if (currentAllowance < amountInWei) {
+          const approved = await approveTokens(amount);
+          if (!approved) {
+            setError("Approval was not confirmed");
+            return null;
+          }
+          const postAllowance = await readAllowance(account.address, contractAddress);
+          if (postAllowance < amountInWei) {
+            setError("Allowance still insufficient after approval");
+            return null;
+          }
+        }
+      } catch (e) {
+        console.error("Allowance/pre-approve check failed", e);
+        // Continue; the tx might still prompt a fresh approval in-wallet
+      }
 
       // Prepare the contract call
       const transaction = prepareContractCall({
