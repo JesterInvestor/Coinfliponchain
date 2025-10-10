@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { parseUnits, formatUnits } from "ethers";
-import { useActiveAccount, useReadContract } from "thirdweb/react";
+import { useActiveAccount, useReadContract, useContractEvents } from "thirdweb/react";
 import { getContract, prepareContractCall, sendTransaction, readContract } from "thirdweb";
 import { createThirdwebClient } from "thirdweb";
 import { base, baseSepolia } from "thirdweb/chains";
@@ -22,6 +22,7 @@ export function useCoinFlip() {
   const [isFlipping, setIsFlipping] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [flipBalance, setFlipBalance] = useState<number>(0);
+  const [lastBetResult, setLastBetResult] = useState<{ won: boolean; result: boolean; payout: number; betId: number } | null>(null);
 
   const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x0000000000000000000000000000000000000000";
   const tokenAddress = process.env.NEXT_PUBLIC_FLIP_TOKEN_ADDRESS || "0x0000000000000000000000000000000000000000";
@@ -39,6 +40,27 @@ export function useCoinFlip() {
     chain,
     address: tokenAddress,
   });
+
+  // Listen for BetResolved events
+  const { data: events } = useContractEvents({ contract });
+
+  // Update last bet result when BetResolved event is received
+  useEffect(() => {
+    if (events && events.length > 0 && account) {
+      const latestEvent = events[events.length - 1];
+      if (latestEvent.eventName === "BetResolved") {
+        const args = latestEvent.args as any;
+        if (args.player === account.address) {
+          setLastBetResult({
+            won: args.won,
+            result: args.result,
+            payout: Number(args.payout) / 1e18,
+            betId: Number(args.betId),
+          });
+        }
+      }
+    }
+  }, [events, account]);
 
   const isConfigInvalid = () => {
     const ca = (contractAddress || "").toLowerCase();
@@ -250,6 +272,10 @@ export function useCoinFlip() {
       const nextResetAt = (currentIdx + 1) * 86400 + off;
       const minBetTokens = Number(minBetWei) / 1e18;
       const chainLabel = process.env.NEXT_PUBLIC_CHAIN_ID === "8453" ? "Base" : "Base Sepolia";
+
+      // Add last bet day index for the user
+      const lastBetDayIdx = account ? await readLastBetDayIndex(account.address) : BigInt(0);
+
       return {
         chainLabel,
         contractAddress,
@@ -257,6 +283,7 @@ export function useCoinFlip() {
         dailyLimitEnabled: Boolean(dailyEnabled),
         nextResetAt,
         currentDayIndex: Number(dayIdx),
+        lastBetDayIndex: Number(lastBetDayIdx),
       };
     } catch (e) {
       const chainLabel = process.env.NEXT_PUBLIC_CHAIN_ID === "8453" ? "Base" : "Base Sepolia";
@@ -267,7 +294,17 @@ export function useCoinFlip() {
         dailyLimitEnabled: false,
         nextResetAt: Math.floor(Date.now() / 1000) + 3600,
         currentDayIndex: 0,
+        lastBetDayIndex: 0,
       };
+    }
+  };
+
+  const getDailyLimitActive = async () => {
+    try {
+      const status = await getBetStatus();
+      return status.dailyLimitEnabled && status.currentDayIndex <= status.lastBetDayIndex;
+    } catch {
+      return false;
     }
   };
 
@@ -560,10 +597,12 @@ export function useCoinFlip() {
     getTokenSupply,
     getBetStatus,
     getPlatformFeeInfo,
+    getDailyLimitActive,
     approveTokens,
     transferTokens,
     transferFromTokens,
     flipBalance,
+    lastBetResult,
     isFlipping,
     error,
     isConnected: !!account,

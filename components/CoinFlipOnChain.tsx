@@ -19,7 +19,6 @@ export default function CoinFlipOnChain() {
   const [showCelebration, setShowCelebration] = useState(false);
   const [useEnhancedAnimation, setUseEnhancedAnimation] = useState(true);
   const [lastTxHash, setLastTxHash] = useState<string | null>(null);
-  const [lastBetResult, setLastBetResult] = useState<{ won: boolean; result: CoinSide } | null>(null);
 
   const { 
     placeBet, 
@@ -28,7 +27,9 @@ export default function CoinFlipOnChain() {
     getTokenSupply,
     getBetStatus,
     getPlatformFeeInfo,
+    getDailyLimitActive,
     flipBalance, 
+    lastBetResult,
     isFlipping: isOnChainFlipping, 
     error, 
     isConnected,
@@ -51,7 +52,8 @@ export default function CoinFlipOnChain() {
   const quickBetAmounts = [1000, 10000, 100000, 1000000];
 
   // Bet status panel state
-  const [status, setStatus] = useState<{ chainLabel: string; contractAddress: string; minBetTokens: number; dailyLimitEnabled: boolean; nextResetAt: number; currentDayIndex: number } | null>(null);
+  const [status, setStatus] = useState<{ chainLabel: string; contractAddress: string; minBetTokens: number; dailyLimitEnabled: boolean; nextResetAt: number; currentDayIndex: number; lastBetDayIndex: number } | null>(null);
+  const [dailyLimitActive, setDailyLimitActive] = useState(false);
 
   useEffect(() => {
     const loadStatus = async () => {
@@ -62,6 +64,18 @@ export default function CoinFlipOnChain() {
     };
     loadStatus();
     const id = setInterval(loadStatus, 30_000);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    const loadDailyLimit = async () => {
+      try {
+        const active = await getDailyLimitActive();
+        setDailyLimitActive(active);
+      } catch {}
+    };
+    loadDailyLimit();
+    const id = setInterval(loadDailyLimit, 30_000);
     return () => clearInterval(id);
   }, []);
 
@@ -139,6 +153,11 @@ export default function CoinFlipOnChain() {
   const handleFlip = async () => {
     if (!effectiveIsConnected) {
       setMessage("⚠️ Please connect your wallet first!");
+      return;
+    }
+
+    if (dailyLimitActive) {
+      setMessage("⚠️ Daily bet limit reached! Please wait for the reset at 00:00 ET.");
       return;
     }
 
@@ -237,20 +256,27 @@ export default function CoinFlipOnChain() {
           <p className="text-xs sm:text-[11px] font-mono font-semibold text-neutral-800 dark:text-white break-all">{bettingContractAddress}</p>
         </div>
       </div>
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="w-full grid grid-cols-1 gap-3">
         <div className="text-center bg-neutral-100 dark:bg-neutral-700 rounded-lg p-4">
           <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">Minimum Bet</p>
           <p className="text-sm sm:text-base font-semibold text-neutral-800 dark:text-white">{status ? status.minBetTokens.toLocaleString() : "…"} $FLIP</p>
         </div>
-        <div className="text-center bg-neutral-100 dark:bg-neutral-700 rounded-lg p-4">
-          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">Reset Countdown (00:00 ET)</p>
-          <p className="text-sm sm:text-base font-semibold text-neutral-800 dark:text-white">
-            {formatHMS(getETSecondsLeft(nowTs))}
-          </p>
-        </div>
       </div>
 
-      {/* Addresses */}
+      {/* Centered Reset Countdown when daily limit active */}
+      {dailyLimitActive && (
+        <div className="w-full text-center py-8">
+          <div className="text-4xl sm:text-6xl font-bold text-amber-700 dark:text-amber-400 mb-2">
+            {formatHMS(getETSecondsLeft(nowTs))}
+          </div>
+          <p className="text-lg sm:text-xl text-neutral-600 dark:text-neutral-400">
+            Daily bet limit reached. Reset at 00:00 ET.
+          </p>
+        </div>
+      )}
+
+      {/* Main betting interface - blurred when daily limit active */}
+      <div className={`${dailyLimitActive ? 'blur-sm pointer-events-none opacity-50' : ''}`}>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="text-center bg-neutral-100 dark:bg-neutral-700 rounded-lg p-4">
           <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">FLIP Token</p>
@@ -308,7 +334,7 @@ export default function CoinFlipOnChain() {
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => setSelectedSide("heads")}
-            disabled={isFlipping || !effectiveIsConnected}
+            disabled={isFlipping || !effectiveIsConnected || dailyLimitActive}
             className={`p-6 sm:p-8 rounded-xl font-bold text-2xl sm:text-3xl transition-all transform border-2 ${
               selectedSide === "heads"
                 ? "bg-amber-700 text-white scale-105 shadow-2xl border-amber-800"
@@ -320,7 +346,7 @@ export default function CoinFlipOnChain() {
           </button>
           <button
             onClick={() => setSelectedSide("tails")}
-            disabled={isFlipping || !effectiveIsConnected}
+            disabled={isFlipping || !effectiveIsConnected || dailyLimitActive}
             className={`p-6 sm:p-8 rounded-xl font-bold text-2xl sm:text-3xl transition-all transform border-2 ${
               selectedSide === "tails"
                 ? "bg-stone-700 text-white scale-105 shadow-2xl border-stone-800"
@@ -343,7 +369,7 @@ export default function CoinFlipOnChain() {
             <button
               key={amount}
               onClick={() => handleQuickBet(amount)}
-              disabled={isFlipping || !effectiveIsConnected}
+              disabled={isFlipping || !effectiveIsConnected || dailyLimitActive}
               className={`p-4 sm:p-5 rounded-lg font-bold text-lg sm:text-xl transition-all transform border-2 ${
                 betAmount === amount && !customAmount
                   ? "bg-amber-700 text-white scale-105 shadow-xl border-amber-800"
@@ -366,7 +392,7 @@ export default function CoinFlipOnChain() {
           value={customAmount}
           onChange={(e) => handleCustomAmount(e.target.value)}
           placeholder="Enter amount in $FLIP"
-          disabled={isFlipping || !effectiveIsConnected}
+          disabled={isFlipping || !effectiveIsConnected || dailyLimitActive}
           className="w-full p-4 text-lg sm:text-xl text-center font-semibold rounded-lg border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-white focus:border-amber-600 focus:ring-2 focus:ring-amber-500 disabled:opacity-50 disabled:cursor-not-allowed min-h-[60px]"
           step="0.01"
           min="0.01"
@@ -441,16 +467,33 @@ export default function CoinFlipOnChain() {
             View Transaction on BaseScan ↗
           </a>
         )}
+        {lastBetResult && (
+          <div className="mt-4 p-4 rounded-lg border-2 text-center">
+            <div className={`text-2xl sm:text-3xl font-bold mb-2 ${lastBetResult.won ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+              {lastBetResult.won ? '🎉 YOU WON!' : '😞 You Lost'}
+            </div>
+            <div className="text-lg text-neutral-700 dark:text-neutral-300">
+              Result: <span className="font-semibold">{lastBetResult.result ? '👑 HEADS' : '⚡ TAILS'}</span>
+            </div>
+            {lastBetResult.won && (
+              <div className="text-lg text-green-700 dark:text-green-400 font-semibold">
+                Payout: +{lastBetResult.payout.toFixed(2)} $FLIP
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Flip Button */}
       <button
         onClick={handleFlip}
-        disabled={isFlipping || isOnChainFlipping || !effectiveIsConnected || !selectedSide || !canBet}
+        disabled={isFlipping || isOnChainFlipping || !effectiveIsConnected || !selectedSide || !canBet || dailyLimitActive}
         className="w-full px-8 py-5 sm:py-6 bg-gradient-to-r from-amber-700 to-yellow-800 hover:from-amber-800 hover:to-yellow-900 disabled:bg-neutral-400 text-white text-xl sm:text-2xl font-bold rounded-xl shadow-2xl transform transition-all duration-200 hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:hover:scale-100 min-h-[70px]"
       >
         {isFlipping || isOnChainFlipping 
           ? "🎲 Flipping..." 
+          : dailyLimitActive
+          ? "⏰ Daily Limit Reached - Wait for Reset"
           : !canBet
           ? `⚠️ Need ${MINIMUM_FLIP_TO_BET.toLocaleString()} $FLIP to Bet`
           : `🎯 Bet ${betAmount.toFixed(2)} $FLIP (Fee: ${(betAmount * BET_FEE_PERCENTAGE).toFixed(2)} $FLIP)`}
@@ -473,6 +516,7 @@ export default function CoinFlipOnChain() {
           <div className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 mt-2">Total</div>
           <div className="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-white mt-1">{stats.total}</div>
         </div>
+      </div>
       </div>
     </div>
   );
