@@ -40,6 +40,95 @@ export function useCoinFlip() {
     address: tokenAddress,
   });
 
+  // Helpers to read contract state
+  const readMinBetAmount = async (): Promise<bigint> => {
+    try {
+      const v = await readContract({
+        contract,
+        method: "function minBetAmount() view returns (uint256)",
+        params: [],
+      });
+      return v as bigint;
+    } catch {
+      // fallback to 1000 * 1e18 when unreadable
+      return BigInt(1000) * BigInt(10) ** BigInt(18);
+    }
+  };
+
+  const readDailyLimitEnabled = async (): Promise<boolean> => {
+    try {
+      const v = await readContract({
+        contract,
+        method: "function dailyLimitEnabled() view returns (bool)",
+        params: [],
+      });
+      return Boolean(v);
+    } catch {
+      return false;
+    }
+  };
+
+  const readCurrentDayIndex = async (): Promise<bigint> => {
+    try {
+      const v = await readContract({
+        contract,
+        method: "function currentDayIndex() view returns (uint256)",
+        params: [],
+      });
+      return v as bigint;
+    } catch {
+      return BigInt(0);
+    }
+  };
+
+  const readLastBetDayIndex = async (addr: string): Promise<bigint> => {
+    try {
+      const v = await readContract({
+        contract,
+        method: "function lastBetDayIndex(address) view returns (uint256)",
+        params: [addr],
+      });
+      return v as bigint;
+    } catch {
+      return BigInt(0);
+    }
+  };
+
+  const parseRpcError = (err: any): string => {
+    const m = (err?.reason || err?.shortMessage || err?.message || "").toString();
+    if (/user rejected/i.test(m)) return "User rejected the transaction";
+    if (/insufficient funds/i.test(m)) return "Insufficient ETH for gas on Base";
+    if (/Daily limit/i.test(m)) return "Daily limit reached. Try again after reset.";
+    if (/Bet amount too low/i.test(m)) return "Bet amount too low";
+    if (/Insufficient balance/i.test(m)) return "Insufficient $FLIP balance";
+    return m || "Transaction failed";
+  };
+
+  const preflightBet = async (amountInWei: bigint): Promise<string | null> => {
+    if (!account) return "Please connect your wallet first";
+    try {
+      const [minBet, dailyEnabled, dayIdx, lastIdx] = await Promise.all([
+        readMinBetAmount(),
+        readDailyLimitEnabled(),
+        readCurrentDayIndex(),
+        readLastBetDayIndex(account.address),
+      ]);
+      if (amountInWei < minBet) return `Minimum bet is ${Number(minBet) / 1e18} $FLIP`;
+      if (dailyEnabled && lastIdx >= dayIdx) return "Daily limit reached. Try again after reset.";
+      // quick balance check
+      const bal = await readContract({
+        contract: tokenContract,
+        method: "function balanceOf(address) view returns (uint256)",
+        params: [account.address],
+      });
+      if ((bal as bigint) < amountInWei) return "Insufficient $FLIP balance";
+      return null;
+    } catch (e) {
+      // don't block on preflight errors
+      return null;
+    }
+  };
+
   /**
    * Use the useReadContract hook to read balance from contract
    * This hook automatically updates when the contract changes
@@ -110,6 +199,56 @@ export function useCoinFlip() {
     }
   };
 
+  // --- Bet status helpers ---
+  const readDailyResetOffsetSeconds = async (): Promise<bigint> => {
+    try {
+      const v = await readContract({
+        contract,
+        method: "function dailyResetOffsetSeconds() view returns (uint256)",
+        params: [],
+      });
+      return v as bigint;
+    } catch {
+      // default 5 hours as in contract default
+      return BigInt(5 * 60 * 60);
+    }
+  };
+
+  const getBetStatus = async () => {
+    try {
+      const [minBetWei, dailyEnabled, offset, dayIdx] = await Promise.all([
+        readMinBetAmount(),
+        readDailyLimitEnabled(),
+        readDailyResetOffsetSeconds(),
+        readCurrentDayIndex(),
+      ]);
+      const now = Math.floor(Date.now() / 1000);
+      const off = Number(offset);
+      const currentIdx = Math.floor((now - off) / 86400);
+      const nextResetAt = (currentIdx + 1) * 86400 + off;
+      const minBetTokens = Number(minBetWei) / 1e18;
+      const chainLabel = process.env.NEXT_PUBLIC_CHAIN_ID === "8453" ? "Base" : "Base Sepolia";
+      return {
+        chainLabel,
+        contractAddress,
+        minBetTokens,
+        dailyLimitEnabled: Boolean(dailyEnabled),
+        nextResetAt,
+        currentDayIndex: Number(dayIdx),
+      };
+    } catch (e) {
+      const chainLabel = process.env.NEXT_PUBLIC_CHAIN_ID === "8453" ? "Base" : "Base Sepolia";
+      return {
+        chainLabel,
+        contractAddress,
+        minBetTokens: 1000,
+        dailyLimitEnabled: false,
+        nextResetAt: Math.floor(Date.now() / 1000) + 3600,
+        currentDayIndex: 0,
+      };
+    }
+  };
+
   /**
    * Approve token spending
    */
@@ -120,6 +259,17 @@ export function useCoinFlip() {
     }
 
     try {
+      // throttle if recent user-rejected approval
+      const key = `approvalRejectAt:${account.address}`;
+      const last = Number(typeof window !== "undefined" ? window.localStorage.getItem(key) : "0") || 0;
+      const now = Date.now();
+      const THROTTLE_MS = 20_000;
+      if (last && now - last < THROTTLE_MS) {
+        const remaining = Math.ceil((THROTTLE_MS - (now - last)) / 1000);
+        setError(`Recent approval was rejected. Please try again in ${remaining}s`);
+        return null;
+      }
+
   const amountInWei = parseUnits(amount.toString(), 18);
       
       const transaction = prepareContractCall({
@@ -136,7 +286,13 @@ export function useCoinFlip() {
       return result;
     } catch (err) {
       console.error("Error approving tokens:", err);
-      setError(err instanceof Error ? err.message : "Failed to approve tokens");
+      const msg = err instanceof Error ? err.message : String(err);
+      if (/user rejected|request rejected|denied/i.test(msg)) {
+        try { if (typeof window !== "undefined" && account) window.localStorage.setItem(`approvalRejectAt:${account.address}`, String(Date.now())); } catch {}
+        setError("User rejected the approval");
+      } else {
+        setError("Failed to approve tokens");
+      }
       return null;
     }
   };
@@ -242,6 +398,13 @@ export function useCoinFlip() {
 
       const amountInWei = BigInt(Math.floor(amount * 10**18));
 
+      // Preflight checks to surface clearer errors
+      const preErr = await preflightBet(amountInWei);
+      if (preErr) {
+        setError(preErr);
+        return null;
+      }
+
       // First approve tokens
       await approveTokens(amount);
 
@@ -266,7 +429,7 @@ export function useCoinFlip() {
       return result;
     } catch (err) {
       console.error("Error placing bet:", err);
-      setError(err instanceof Error ? err.message : "Failed to place bet");
+      setError(parseRpcError(err));
       return null;
     } finally {
       setIsFlipping(false);
@@ -331,6 +494,7 @@ export function useCoinFlip() {
     getPlayerStats,
     getFlipBalance,
     getTokenSupply,
+    getBetStatus,
     getPlatformFeeInfo,
     approveTokens,
     transferTokens,

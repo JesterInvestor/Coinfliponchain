@@ -24,6 +24,7 @@ export default function CoinFlipOnChain() {
     getPlayerStats, 
     getFlipBalance, 
     getTokenSupply,
+    getBetStatus,
     getPlatformFeeInfo,
     flipBalance, 
     isFlipping: isOnChainFlipping, 
@@ -46,6 +47,51 @@ export default function CoinFlipOnChain() {
   const isVIP = flipBalance >= VIP_FLIP_THRESHOLD;
 
   const quickBetAmounts = [1000, 10000, 100000, 1000000];
+
+  // Bet status panel state
+  const [status, setStatus] = useState<{ chainLabel: string; contractAddress: string; minBetTokens: number; dailyLimitEnabled: boolean; nextResetAt: number; currentDayIndex: number } | null>(null);
+
+  useEffect(() => {
+    const loadStatus = async () => {
+      try {
+        const s = await getBetStatus();
+        setStatus(s);
+      } catch {}
+    };
+    loadStatus();
+    const id = setInterval(loadStatus, 30_000);
+    return () => clearInterval(id);
+  }, []);
+
+  const [nowTs, setNowTs] = useState(Math.floor(Date.now() / 1000));
+  useEffect(() => {
+    const t = setInterval(() => setNowTs(Math.floor(Date.now() / 1000)), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const formatHMS = (total: number) => {
+    const sec = Math.max(0, Math.floor(total));
+    const h = Math.floor(sec / 3600).toString().padStart(2, "0");
+    const m = Math.floor((sec % 3600) / 60).toString().padStart(2, "0");
+    const s = (sec % 60).toString().padStart(2, "0");
+    return `${h}:${m}:${s}`;
+  };
+
+  const getETSecondsLeft = (epochSec: number) => {
+    const d = new Date(epochSec * 1000);
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/New_York",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    }).formatToParts(d);
+    const h = Number(parts.find((p) => p.type === "hour")?.value ?? "0");
+    const m = Number(parts.find((p) => p.type === "minute")?.value ?? "0");
+    const s = Number(parts.find((p) => p.type === "second")?.value ?? "0");
+    const passed = h * 3600 + m * 60 + s;
+    return 86400 - passed;
+  };
 
   const handleQuickBet = (amount: number) => {
     setBetAmount(amount);
@@ -175,6 +221,30 @@ export default function CoinFlipOnChain() {
         >
           💎 Buy $FLIP Tokens
         </button>
+      </div>
+
+      {/* Bet Status Panel */}
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="text-center bg-neutral-100 dark:bg-neutral-700 rounded-lg p-4">
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">Chain</p>
+          <p className="text-sm sm:text-base font-semibold text-neutral-800 dark:text-white">{status?.chainLabel || (process.env.NEXT_PUBLIC_CHAIN_ID === "8453" ? "Base" : "Base Sepolia")}</p>
+        </div>
+        <div className="text-center bg-neutral-100 dark:bg-neutral-700 rounded-lg p-4">
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">Contract (V2)</p>
+          <p className="text-xs sm:text-[11px] font-mono font-semibold text-neutral-800 dark:text-white break-all">{bettingContractAddress}</p>
+        </div>
+      </div>
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="text-center bg-neutral-100 dark:bg-neutral-700 rounded-lg p-4">
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">Minimum Bet</p>
+          <p className="text-sm sm:text-base font-semibold text-neutral-800 dark:text-white">{status ? status.minBetTokens.toLocaleString() : "…"} $FLIP</p>
+        </div>
+        <div className="text-center bg-neutral-100 dark:bg-neutral-700 rounded-lg p-4">
+          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mb-1">Reset Countdown (00:00 ET)</p>
+          <p className="text-sm sm:text-base font-semibold text-neutral-800 dark:text-white">
+            {formatHMS(getETSecondsLeft(nowTs))}
+          </p>
+        </div>
       </div>
 
       {/* Addresses */}
