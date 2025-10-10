@@ -18,6 +18,8 @@ export default function CoinFlipOnChain() {
   const [platformFeeBps, setPlatformFeeBps] = useState<number>(100); // 1% default
   const [showCelebration, setShowCelebration] = useState(false);
   const [useEnhancedAnimation, setUseEnhancedAnimation] = useState(true);
+  const [lastTxHash, setLastTxHash] = useState<string | null>(null);
+  const [lastBetResult, setLastBetResult] = useState<{ won: boolean; result: CoinSide } | null>(null);
 
   const { 
     placeBet, 
@@ -175,6 +177,7 @@ export default function CoinFlipOnChain() {
       const tx = await placeBet(betAmount, choice);
       
       if (tx) {
+        setLastTxHash(tx.transactionHash);
         setMessage("⏳ Transaction sent! Waiting for confirmation...");
         
         // Wait a bit and then fetch updated stats
@@ -424,9 +427,21 @@ export default function CoinFlipOnChain() {
       </div>
 
       {/* Result Message */}
-      <p className="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-white min-h-[3rem] text-center px-4">
-        {message}
-      </p>
+      <div className="text-center px-4">
+        <p className="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-white min-h-[3rem]">
+          {message}
+        </p>
+        {lastTxHash && (
+          <a
+            href={`https://basescan.org/tx/${lastTxHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-2 text-sm text-amber-700 dark:text-amber-400 hover:underline font-semibold"
+          >
+            View Transaction on BaseScan ↗
+          </a>
+        )}
+      </div>
 
       {/* Flip Button */}
       <button
