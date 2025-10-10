@@ -119,6 +119,7 @@ export function useCoinFlip() {
     const m = (err?.reason || err?.shortMessage || err?.message || "").toString();
     if (/user rejected/i.test(m)) return "User rejected the transaction";
     if (/insufficient funds/i.test(m)) return "Insufficient ETH for gas on Base";
+    if (/out of gas|gas required exceeds allowance|intrinsic gas too low/i.test(m)) return "Out of gas: Try again with a higher gas limit (e.g., 250k–350k) or reset to wallet-estimated gas.";
     if (/Daily limit/i.test(m)) return "Daily limit reached. Try again after reset.";
     if (/Bet amount too low/i.test(m)) return "Bet amount too low";
     if (/Insufficient balance/i.test(m)) return "Insufficient $FLIP balance";
@@ -295,19 +296,29 @@ export function useCoinFlip() {
         return null;
       }
 
-  const amountInWei = parseUnits(amount.toString(), 18);
-      
-      const transaction = prepareContractCall({
+      const amountInWei = parseUnits(amount.toString(), 18);
+      const current = await readAllowance(account.address, contractAddress);
+      if (current >= (amountInWei as unknown as bigint)) {
+        return { alreadyApproved: true } as any;
+      }
+
+      // Some tokens require resetting to 0 before setting a new non-zero allowance
+  if (current > BigInt(0)) {
+        const resetTx = prepareContractCall({
+          contract: tokenContract,
+          method: "function approve(address spender, uint256 amount) returns (bool)",
+          params: [contractAddress, BigInt(0)],
+        });
+        await sendTransaction({ account, transaction: resetTx });
+      }
+
+      const setTx = prepareContractCall({
         contract: tokenContract,
         method: "function approve(address spender, uint256 amount) returns (bool)",
         params: [contractAddress, amountInWei],
       });
 
-      const result = await sendTransaction({
-        account,
-        transaction,
-      });
-
+      const result = await sendTransaction({ account, transaction: setTx });
       return result;
     } catch (err) {
       console.error("Error approving tokens:", err);
@@ -421,7 +432,7 @@ export function useCoinFlip() {
       setIsFlipping(true);
       setError(null);
 
-      const amountInWei = BigInt(Math.floor(amount * 10**18));
+  const amountInWei = parseUnits(amount.toString(), 18) as unknown as bigint;
 
       // Preflight checks to surface clearer errors
       if (isConfigInvalid()) {
