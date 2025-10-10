@@ -466,11 +466,18 @@ export function useCoinFlip() {
       }
 
       // Prepare the contract call
+      // Provide an explicit gas limit to avoid underestimation causing OOG
+      const gasLimitDefault = Number(process.env.NEXT_PUBLIC_BET_GAS_LIMIT || 350000);
+      const gasLimit = BigInt(isFinite(gasLimitDefault) ? Math.max(250000, gasLimitDefault) : 350000);
+
       const transaction = prepareContractCall({
         contract,
         method: "function placeBet(uint256 _amount, bool _choice) returns (uint256)",
         params: [amountInWei, choice],
-      });
+        // Thirdweb supports passing overrides like gas
+        // @ts-ignore - injected override for gas limit
+        gas: gasLimit,
+      } as any);
 
       // Send the transaction
       const result = await sendTransaction({
