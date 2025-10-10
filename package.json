@@ -11,6 +11,8 @@
     "deploy:base:sepolia": "node ./scripts/clean-artifacts.mjs && npx hardhat run ./scripts/deploy.mjs --network baseSepolia",
   "deploy:v2:base": "node ./scripts/clean-artifacts.mjs && CONTRACT_NAME=CoinFlipBettingV2 npx hardhat run ./scripts/deploy.mjs --network base -- --contract=CoinFlipBettingV2",
   "deploy:v2:base:sepolia": "node ./scripts/clean-artifacts.mjs && CONTRACT_NAME=CoinFlipBettingV2 npx hardhat run ./scripts/deploy.mjs --network baseSepolia -- --contract=CoinFlipBettingV2",
+  "deploy:swapper:base": "node ./scripts/clean-artifacts.mjs && npx hardhat clean && npx hardhat compile && node ./scripts/deploy_swapper.mjs --network base",
+  "deploy:swapper:base:sepolia": "node ./scripts/clean-artifacts.mjs && npx hardhat clean && npx hardhat compile && node ./scripts/deploy_swapper.mjs --network baseSepolia",
     "artifacts:clean": "node ./scripts/clean-artifacts.mjs"
   },
   "dependencies": {
@@ -30,7 +32,7 @@
     "@thirdweb-dev/contracts": "^3.15.0",
     "@nomicfoundation/hardhat-ethers": "^4.0.1",
     "dotenv": "^17.2.3",
-    "hardhat": "^3.0.6",
+  "hardhat": "^3.0.6",
     "solc": "^0.8.30"
   },
   "type": "module"

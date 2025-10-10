@@ -1,0 +1,101 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Compile contracts",
+			"type": "shell",
+			"command": "npx hardhat compile",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Compile contracts 2",
+			"type": "shell",
+			"command": "npx hardhat compile",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Compile contracts 3",
+			"type": "shell",
+			"command": "npx hardhat compile",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Compile contracts 4",
+			"type": "shell",
+			"command": "npx hardhat compile --show-stack-traces",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Compile contracts with viaIR",
+			"type": "shell",
+			"command": "npx hardhat compile --show-stack-traces",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Hardhat compile direct",
+			"type": "shell",
+			"command": "npx hardhat compile --no-compile --help",
+			"group": "build"
+		},
+		{
+			"label": "Compile contracts final",
+			"type": "shell",
+			"command": "npx hardhat compile --force --show-stack-traces",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Compile contracts minimal ownable",
+			"type": "shell",
+			"command": "npx hardhat compile --force --show-stack-traces",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Compile contracts V2",
+			"type": "shell",
+			"command": "npx hardhat compile --force --show-stack-traces",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Compile contracts after removal",
+			"type": "shell",
+			"command": "npx hardhat compile --force --show-stack-traces",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Compile contracts V2",
+			"type": "shell",
+			"command": "npx hardhat compile --show-stack-traces",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		}
+	]
+}
